@@ -48,13 +48,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     }
     
     func application(
-        _ application: UIApplication,
-        didReceiveRemoteNotification userInfo: [AnyHashable: Any]
-    ) async -> UIBackgroundFetchResult {
-        return .newData
-    }
-    
-    func application(
         _ app: UIApplication,
         open url: URL,
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]

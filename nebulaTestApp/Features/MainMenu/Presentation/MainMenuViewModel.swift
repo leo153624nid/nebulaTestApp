@@ -98,46 +98,14 @@ final class MainMenuViewModel: ViewModel {
         sections.append(
             .init(identifier: .main,
                   items: [.learning,
-                          .modes,
-                          .hazard,
-                          MainLocalBannersUtil.shared.canShowReviewCell ? .review : nil,
-                          MainLocalBannersUtil.shared.canShowSaleCell ? .sale : nil,
-                          .exam,
-                          .videoTips].compactMap({ $0 })
+                          .exam]
                  )
         )
-        if userSurvey != nil {
-            sections.append(
-                .init(identifier: .survey,
-                      items: [.survey])
-            )
-        }
         sections.append(
             .init(identifier: .more,
-                  items: [.roadSigns,
-                          DrivingPracticeUtil.canShowInMain ? .drivingPractice : nil,
-                          .highwayCode,
-                          .todo,
-                          .errors,
-                          .favorites].compactMap({ $0 }))
+                  items: []
+                 )
         )
-        
-        // Log some cells
-        if isViewAppeared && !isReviewCellLogged && sections.contains(
-            where: { $0.identifier == .main && $0.items.contains(where: { $0 == .review }) }
-        ) {
-            if MainLocalBannersUtil.shared.reviewCellFirstShowDate == nil {
-                MainLocalBannersUtil.shared.reviewCellFirstShowDate = Date()
-            }
-            RPHAnalytics.logMainScreenReviewBanner()
-            isReviewCellLogged = true
-        }
-        if isViewAppeared && !isDrivingPracticeCellShowLogged && sections.contains(
-            where: { $0.identifier == .more && $0.items.contains(where: { $0 == .drivingPractice }) }
-        ) {
-            RPHAnalytics.logMainScreenDrivingPracticeShown(version: DrivingPracticeUtil.version)
-            isDrivingPracticeCellShowLogged = true
-        }
         
         self.sections = sections
     }
