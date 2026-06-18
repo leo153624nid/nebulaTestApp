@@ -24,9 +24,13 @@ final class MainMenuViewModel: ViewModel {
     unowned let coordinator: HomeTabCoordinator
     /// Subscriptions store
     private var cancellables = Set<AnyCancellable>()
+    
+    @Injected private var chatsRepository: ChatsProvider
 
     /// Sections and items of sections for view
     @Published private(set) var sections = [Section]()
+    /// TODO
+    @Published private(set) var isLoading = false
     
     /// View on screen.
     private var isViewAppeared = false
@@ -90,9 +94,11 @@ final class MainMenuViewModel: ViewModel {
     
     private func actionsAfterAppear() {
         reloadSections()
+        
+        getChats() // TODO: here ?
     }
     
-    private func reloadSections() {
+    private func reloadSections() { // TODO
         var sections = [Section]()
         
         sections.append(
@@ -108,6 +114,31 @@ final class MainMenuViewModel: ViewModel {
         )
         
         self.sections = sections
+    }
+    
+    private func getChats() {
+        Task { [weak self] in
+            guard let self else { return }
+            
+            await MainActor.run {
+                self.isLoading = true
+            }
+            
+            let result = await chatsRepository.getChatsList()
+            
+            await MainActor.run {
+                guard self.isViewAppeared else { return }
+                
+                self.isLoading = false
+                
+                switch result {
+                case .success(let chats):
+                    print(chats) // TODO
+                case .failure(let error):
+                    print(error) // TODO
+                }
+            }
+        }
     }
     
 }
@@ -181,12 +212,7 @@ extension MainMenuViewModel {
 // MARK: - Setup model
 private extension MainMenuViewModel {
     func setupUpdates() {
-        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.actionsAfterAppear()
-            }
-            .store(in: &cancellables)
+        
     }
     
 }

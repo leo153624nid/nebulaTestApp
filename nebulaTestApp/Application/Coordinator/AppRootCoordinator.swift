@@ -23,15 +23,6 @@ final class AppRootCoordinator: RootCoordinator {
             handleTabClick(oldValue: oldValue)
         }
     }
-    /// Previous root tab
-    private var previousTab = AppTab.home
-    /// Current tab coordinator.
-    private var currentTabCoordinator: (any Coordinator)? {
-        return switch tab {
-        case .home:
-            mainMenuCoordinator
-        }
-    }
     
     /// Main menu module coordinator.
     @Published var mainMenuCoordinator: HomeTabCoordinator!

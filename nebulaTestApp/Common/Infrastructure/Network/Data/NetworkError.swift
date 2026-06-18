@@ -13,6 +13,8 @@ enum NetworkError: Error {
     case badRequest
     /// Invalid response.
     case badResponse
+    /// Failed decoding
+    case decodingFailed
     /// Device is not connected to internet.
     case notConnectedToInternet
     /// Problem with connection.

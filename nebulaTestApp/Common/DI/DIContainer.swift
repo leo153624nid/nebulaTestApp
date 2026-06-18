@@ -95,11 +95,23 @@ extension DIContainer {
     func registerAll() {
         // order is important
         registerCommons()
+        registerChatsFeature()
     }
     
     private func registerCommons() {
         register(type: NetworkService.self) { _ in
             DefaultNetworkService()
+        }
+    }
+    
+    private func registerChatsFeature() {
+        register(type: ChatAPI.self) { container in
+            let networkService = container.resolve(type: NetworkService.self)!
+            return ChatService(networkService: networkService)
+        }
+        register(type: ChatsProvider.self) { container in
+            let chatService = container.resolve(type: ChatAPI.self)!
+            return ChatsRepository(chatService: chatService)
         }
     }
     
