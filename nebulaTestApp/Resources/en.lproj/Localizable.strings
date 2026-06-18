@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+ nebulaTestApp
+
+  Created by A Ch on 18.06.2026.
+  
+*/
+
+// MARK: - Common
+
+"Common.languageCode" = "en";
+"Common.language" = "English";
+"Common.yes" = "Yes";
+"Common.no" = "No";
+"Common.ok" = "OK";
+"Common.appName" = "NebulaTestApp";
