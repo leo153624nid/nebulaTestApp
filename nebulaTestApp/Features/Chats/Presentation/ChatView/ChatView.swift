@@ -42,8 +42,6 @@ struct ChatView: View {
                 // Need a weak viewModel, because toolbar capture it
                 viewModel?.perform(action: .listButtonTapped)
             }
-//            .navigationBarTitleDisplayMode(.inline)
-//            .navigationTitle(Str.ChatView.screenTitle)
             .toolbar {
                 toolBarTitle(placement: .topBarLeading)
             }

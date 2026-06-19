@@ -27,8 +27,7 @@ final class ChatViewModel: ViewModel {
     let chat: Chat
     
     /// Search text
-    @Published var searchText = ""
-    
+    @Published var searchText = "" // TODO
     /// View is blocked with loading splash
     @Published private var isViewBlocked = false
     

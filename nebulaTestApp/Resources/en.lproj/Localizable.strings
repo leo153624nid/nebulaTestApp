@@ -26,3 +26,6 @@
 // MARK: - ChatListView
 
 "ChatListView.screenTitle" = "AI Chat History";
+"ChatListView.EmptyList.title" = "No chats yet";
+"ChatListView.EmptyList.desc" = "Start a conversation to see\nyour history here";
+"ChatListView.Error.title" = "Error";

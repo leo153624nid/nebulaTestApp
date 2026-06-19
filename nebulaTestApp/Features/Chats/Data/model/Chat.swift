@@ -8,7 +8,7 @@
 import Foundation
 
 /// Chat data (domain)
-struct Chat {
+struct Chat: Equatable {
     /// Chat id
     let id: String
     /// Title

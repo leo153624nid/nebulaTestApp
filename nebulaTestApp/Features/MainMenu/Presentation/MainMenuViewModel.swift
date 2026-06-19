@@ -97,8 +97,6 @@ final class MainMenuViewModel: ViewModel {
     
     private func actionsAfterAppear() {
         reloadSections()
-        
-        getChats() // TODO: here ?
     }
     
     private func reloadSections() { // TODO

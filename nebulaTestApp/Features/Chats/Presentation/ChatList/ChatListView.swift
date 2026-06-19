@@ -33,111 +33,95 @@ struct ChatListView: View {
     var body: some View {
         contentView
             .ignoresSafeArea(edges: .bottom)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(Str.ChatListView.screenTitle)
+            .toolbar {
+                toolBarTitle(placement: .principal)
+            }
             .coloredNavigationBarBackButton()
+            .onAppear {
+                viewModel.perform(action: .onAppear)
+            }
+            .onDisappear {
+                viewModel.perform(action: .onDisappear)
+            }
+    }
+    
+    private func toolBarTitle(placement: ToolbarItemPlacement) -> some ToolbarContent {
+        ToolbarItem(placement: placement) {
+            Text(Str.ChatListView.screenTitle)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundStyle(.textPrimary) // TODO
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+        }
     }
     
     private var contentView: some View {
-        VStack(alignment: .leading, spacing: sectionVerticalSpacing) {
-            headerView
-                .padding(.horizontal, 16)
-            
-//            searchView
-//                .padding(.horizontal, 16)
-            
-//            stateListView
+        VStack(alignment: .leading) {
+            if viewModel.isLoading {
+                loadingView
+            } else if let message = viewModel.errorMessage {
+                messageView(title: Str.ChatListView.Error.title,
+                            description: message)
+            } else if viewModel.chatList.isEmpty {
+                messageView(title: Str.ChatListView.EmptyList.title,
+                            description: Str.ChatListView.EmptyList.desc)
+            } else {
+                listView
+            }
         }
         .padding(.top, 16)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Color.backgroundMain)
-//        .animation(.easeInOut, value: viewModel.results)
-//        .allowsHitTesting(!viewModel.isViewDisabled)
+        .background(Color.backgroundMain) // TODO
+        .animation(.easeInOut, value: viewModel.isLoading)
+        .animation(.easeInOut, value: viewModel.errorMessage)
+        .animation(.easeInOut, value: viewModel.chatList)
     }
     
-    private var headerView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(Str.ChatListView.screenTitle) // TODO
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(Color.textPrimary)
+    private func messageView(title: String,
+                             description: String) -> some View {
+        VStack(spacing: 8) {
+            Rectangle() // TODO: add pic
+                .fill(Color.yellow) // TODO
+                .frame(width: 60, height: 60)
             
-            Text(Str.ChatListView.screenTitle) // TODO
-                .font(.system(size: 14))
-                .foregroundStyle(Color.textSecondary)
+            Text(title)
+                .font(.system(size: 28, weight: .bold))
+                .foregroundStyle(Color.accentGradientEnd) // TODO
+            
+            Text(description)
+                .font(.system(size: 16, weight: .regular))
+                .foregroundStyle(Color.textSecondary) // TODO
+                .multilineTextAlignment(.center)
+        }
+        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var loadingView: some View {
+        ZStack {
+            ProgressView() // TODO: update color
+                .progressViewStyle(CircularProgressViewStyle())
+                .frame(width: 20, height: 20)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var listView: some View {
+        ScrollView {
+            LazyVStack(spacing: stateItemSpacing) {
+                ForEach(viewModel.chatList, id: \.id) { chat in
+                    Text(chat.updatedAt.toDisplayString()) // TODO: update cell
+                    .equatable()
+                    .transition(.opacity)
+                    .onTapGesture {
+                        viewModel.perform(action: .selectChat(chat))
+                    }
+                }
+            }
+            .padding(.bottom, nextButtonHeight + 2 * stateItemSpacing + specialBottomPadding) // fixing visible tabbar inset bug // TODO
+            .padding(.horizontal, 16)
         }
     }
-    
-//    private var searchView: some View {
-//        HStack(spacing: 8) {
-//            CommonImages.Pdd.search.swiftUIImage
-//                .resizable()
-//                .scaledToFit()
-//                .frame(width: 20, height: 20)
-//                .foregroundStyle(Color.textSecondary)
-//            
-//            ColoredPlaceholderTextField(text: $viewModel.searchText,
-//                                        placeholder: Str.AppSpecificLocalizable.SelectState.searchPlaceholder)
-//            .submitLabel(.done)
-//            .textContentType(.addressState)
-//        }
-//        .padding(.horizontal, 16)
-//        .frame(height: nextButtonHeight)
-//        .background(Color.backgroundAlternative)
-//        .clipShape(RoundedRectangle(cornerRadius: 24))
-//    }
-    
-//    private var stateListView: some View {
-//        ScrollView {
-//            LazyVStack(spacing: stateItemSpacing) {
-//                ForEach(viewModel.results, id: \.rawValue) { state in
-//                    StateCellView(state: state,
-//                                  isSelected: viewModel.selectedState == state,
-//                                  onTap: { viewModel.perform(action: .selectState(state)) })
-//                    .equatable()
-//                    .transition(.opacity)
-//                }
-//            }
-//            .padding(.bottom, nextButtonHeight + 2 * stateItemSpacing + bottomSafeAreaPadding
-//                     + specialBottomPadding) // fixing visible tabbar inset bug
-//            .padding(.horizontal, 16)
-//        }
-//        .simultaneousGesture(
-//            DragGesture().onChanged { _ in
-//                hideKeyboard()
-//            }
-//        )
-//    }
-    
-//    private var overlayView: some View {
-//        VStack {
-//            Spacer()
-//            
-//            nextButton
-//                .padding(.bottom, specialBottomPadding) // fixing visible tabbar inset bug
-//        }
-//        .padding(.horizontal, 16)
-//        .padding(.bottom, bottomSafeAreaPadding)
-//        .opacity(keyboard.isKeyboardVisible ? 0 : 1)
-//    }
-    
-//    private var nextButton: some View {
-//        Button {
-//            hideKeyboard()
-//            viewModel.perform(action: .nextButtonTapped)
-//        } label: {
-//            TextBadgeView(title: Str.AppSpecificLocalizable.SelectState.nextButtonTitle,
-//                          height: nextButtonHeight,
-//                          isInfinityWidth: true,
-//                          fontSize: 16,
-//                          fontWeight: .bold,
-//                          titleColor: .textContrast,
-//                          backgroundColor: .accentPrimary)
-//        }
-//        .buttonStyle(AlphaWhenPressedButtonStyle())
-//        .disabled(viewModel.selectedState == nil)
-//        .background(Color.backgroundMain.clipShape(.rect(cornerRadius: 16)))
-//        .padding(.bottom, 1)
-//    }
     
 }
 
