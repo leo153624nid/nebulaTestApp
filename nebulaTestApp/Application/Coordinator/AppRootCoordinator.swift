@@ -17,6 +17,8 @@ final class AppRootCoordinator: RootCoordinator {
     /// Subscriptions store
     private var cancellables = Set<AnyCancellable>()
     
+    @Injected private var tokenStorage: TokenStorage
+    
     /// Selected root tab.
     @Published var tab = AppTab.home {
         didSet {
@@ -37,12 +39,21 @@ final class AppRootCoordinator: RootCoordinator {
     init() {
         mainMenuCoordinator = HomeTabCoordinator(parent: self)
         setupSubscriptions()
+        setupCredentials()
     }
     
     // MARK: - Private
     
     private func setupSubscriptions() {
         
+    }
+    
+    private func setupCredentials() {
+        guard tokenStorage.getToken() == nil else { return }
+        tokenStorage.save(
+            token: AppConstants.API.token,
+            userID: AppConstants.API.userID
+        )
     }
     
     private func handleTabClick(oldValue: AppTab) {

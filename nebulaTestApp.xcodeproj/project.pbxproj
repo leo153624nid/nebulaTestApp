@@ -10,9 +10,22 @@
 		5C99A1912FE3DF43004FA6C0 /* nebulaTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nebulaTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5CF405112FE55F6C00DF99BD /* Exceptions for "nebulaTestApp" folder in "nebulaTestApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Common/Data/AppConstants.example.swift,
+			);
+			target = 5C99A1902FE3DF43004FA6C0 /* nebulaTestApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5C99A1932FE3DF43004FA6C0 /* nebulaTestApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5CF405112FE55F6C00DF99BD /* Exceptions for "nebulaTestApp" folder in "nebulaTestApp" target */,
+			);
 			path = nebulaTestApp;
 			sourceTree = "<group>";
 		};

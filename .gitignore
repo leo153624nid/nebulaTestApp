@@ -90,3 +90,6 @@ Utils/Crowdin/sources
 # SwiftGen
 ######################
 *+Generated.swift
+
+# Credentials
+nebulaTestApp/Common/Data/AppConstants.swift

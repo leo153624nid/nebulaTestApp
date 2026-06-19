@@ -19,6 +19,22 @@ enum NetworkError: Error {
     case notConnectedToInternet
     /// Problem with connection.
     case connectionError(_ underlyingError: Error)
+    /// Authorized error
+    case unAuthorized
     /// Unknown error.
     case unknown
+    
+    /// localized description of error for user
+    var localizedDescription: String {
+        return switch self {
+        case .badRequest, .badResponse, .decodingFailed, .unAuthorized:
+            Str.NetworkError.someError
+        case .notConnectedToInternet:
+            Str.NetworkError.notConnectedToInternet
+        case .connectionError:
+            Str.NetworkError.connectionError
+        case .unknown:
+            Str.NetworkError.unknown
+        }
+    }
 }

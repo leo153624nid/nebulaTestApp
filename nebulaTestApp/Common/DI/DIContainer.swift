@@ -102,12 +102,17 @@ extension DIContainer {
         register(type: NetworkService.self) { _ in
             DefaultNetworkService()
         }
+        register(type: TokenStorage.self) { _ in
+            KeychainTokenStorage()
+        }
     }
     
     private func registerChatsFeature() {
         register(type: ChatAPI.self) { container in
             let networkService = container.resolve(type: NetworkService.self)!
-            return ChatService(networkService: networkService)
+            let tokenStorage = container.resolve(type: TokenStorage.self)!
+            return ChatService(networkService: networkService,
+                               tokenStorage: tokenStorage)
         }
         register(type: ChatsProvider.self) { container in
             let chatService = container.resolve(type: ChatAPI.self)!

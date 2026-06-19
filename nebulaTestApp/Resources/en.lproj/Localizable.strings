@@ -15,6 +15,13 @@
 "Common.ok" = "OK";
 "Common.appName" = "NebulaTestApp";
 
+// MARK: - Network Error
+
+"NetworkError.someError" = "Something went wrong";
+"NetworkError.notConnectedToInternet" = "No internet connection";
+"NetworkError.connectionError" = "Problem with connection";
+"NetworkError.unknown" = "Unknown error";
+
 // MARK: - MainMenu
 
 "MainMenu.header" = "Your AI tools,\nready to go";
