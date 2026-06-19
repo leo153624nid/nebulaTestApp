@@ -15,31 +15,41 @@ final class KeychainTokenStorage: TokenStorage {
         static let userID = "app.userID"
     }
     
+    private let queue = DispatchQueue(label: "app.keychain", attributes: .concurrent)
+    
     /// Save user credentials
     /// - Parameters:
     ///   - token: token
     ///   - userID: user id
     func save(token: String, userID: String) {
-        set(value: token, forKey: Keys.token)
-        set(value: userID, forKey: Keys.userID)
+        queue.async(flags: .barrier) {
+            self.set(value: token, forKey: Keys.token)
+            self.set(value: userID, forKey: Keys.userID)
+        }
     }
     
     /// Get token
     /// - Returns: token (optional)
     func getToken() -> String? {
-        get(forKey: Keys.token)
+        queue.sync {
+            get(forKey: Keys.token)
+        }
     }
     
     /// Get user id
     /// - Returns: user id (optional)
     func getUserID() -> String? {
-        get(forKey: Keys.userID)
+        queue.sync {
+            get(forKey: Keys.userID)
+        }
     }
     
     /// Clear all
     func clear() {
-        delete(forKey: Keys.token)
-        delete(forKey: Keys.userID)
+        queue.async(flags: .barrier) {
+            self.delete(forKey: Keys.token)
+            self.delete(forKey: Keys.userID)
+        }
     }
     
     // MARK: - Private
