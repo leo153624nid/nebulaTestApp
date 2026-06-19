@@ -35,18 +35,22 @@ struct ChatView: View {
     }()
     
     var body: some View {
-        contentView
-            .ignoresSafeArea(edges: .bottom)
-            .trailingNavBarButton(image: CommonImages.Navigation.angleRight.swiftUIImage,
-                                  color: .neutralSecondary) { [weak viewModel] in
-                // Need a weak viewModel, because toolbar capture it
-                viewModel?.perform(action: .listButtonTapped)
-            }
-            .toolbar {
-                toolBarTitle(placement: .topBarLeading)
-            }
-            .coloredNavigationBarBackButton()
-            .animation(.easeInOut, value: keyboard.isKeyboardVisible)
+        ZStack {
+            Color.background
+                .ignoresSafeArea()
+            
+            contentView
+        }
+        .trailingNavBarButton(image: CommonImages.Navigation.angleRight.swiftUIImage,
+                              color: .neutralSecondary) { [weak viewModel] in
+            // Need a weak viewModel, because toolbar capture it
+            viewModel?.perform(action: .listButtonTapped)
+        }
+        .toolbar {
+            toolBarTitle(placement: .topBarLeading)
+        }
+        .coloredNavigationBarBackButton()
+        .animation(.easeInOut, value: keyboard.isKeyboardVisible)
     }
     
     private func toolBarTitle(placement: ToolbarItemPlacement) -> some ToolbarContent {
@@ -59,12 +63,12 @@ struct ChatView: View {
                 VStack(alignment: .leading) {
                     Text(Str.ChatView.screenTitle)
                         .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(.textPrimary) // TODO
+                        .foregroundStyle(.textAccent)
                         .lineLimit(1)
                     
                     Text(viewModel.chat.updatedAt.toDisplayString())
                         .font(.system(size: 14, weight: .regular))
-                        .foregroundStyle(.textSecondary) // TODO
+                        .foregroundStyle(.textAccent.opacity(0.3))
                         .lineLimit(1)
                 }
             }
@@ -86,7 +90,6 @@ struct ChatView: View {
         .offset(y: keyboard.isKeyboardVisible ? -headerOffset : 0)
         .padding(.top, 16)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Color.backgroundMain)
 //        .animation(.easeInOut, value: viewModel.results)
         .onTapGesture {
             hideKeyboard()

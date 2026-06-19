@@ -18,7 +18,7 @@ extension UITabBar {
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithTransparentBackground()
         tabBarAppearance.backgroundImage = UIImage(resource: .tabBarBackground)
-            .withTintColor(UIColor(resource: .backgroundMain))
+            .withTintColor(UIColor(resource: .accent))
             .resizableAtCenter()
         tabBarAppearance.shadowImage = nil
         

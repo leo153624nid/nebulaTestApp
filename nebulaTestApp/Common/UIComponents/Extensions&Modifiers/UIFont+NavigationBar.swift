@@ -10,7 +10,7 @@ import UIKit
 extension UIFont {
     /// Font for navigation bar.
     static var navigationBar: UIFont {
-        .systemFont(ofSize: 16,
+        .systemFont(ofSize: 20,
                     weight: .semibold)
     }
 }

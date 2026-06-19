@@ -43,5 +43,14 @@ enum DesignedAlertType {
 
 // MARK: - Ready alerts
 extension AlertItem {
-    
+#if DEBUG
+    /// Alert item for setup prod credentials
+    static func setupCredentialsAlertItem(completion: @escaping () -> Void) -> AlertItem {
+        AlertItem(title: "No credentials",
+                  message: "Setup your credentials in Common/Data/AppConstants.example.swift",
+                  actions: [
+                    AlertAction(title: Str.Common.ok, action: { completion() })
+                  ])
+    }
+#endif
 }

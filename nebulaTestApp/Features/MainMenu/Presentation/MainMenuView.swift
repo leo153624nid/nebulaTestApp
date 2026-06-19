@@ -30,21 +30,12 @@ struct MainMenuView: View {
     
     var body: some View {
         ZStack(alignment: .topLeading) {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 12) {
-                    ForEach(viewModel.sections, id: \.identifier) {
-                        sectionView($0)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
-                .padding(.bottom, 40)
-            }
-            .background(Color.backgroundMain)
+            Color.background
+                .ignoresSafeArea()
+            
+            contentView
         }
-        .animation(.easeInOut, value: viewModel.sections)
-        .toolbar(false ? .hidden : tabbarStandartVisibility, // TODO: now is allways hidden
+        .toolbar(true ? .hidden : tabbarStandartVisibility, // TODO: now is allways hidden
                  for: .tabBar)
         .onAppear {
             viewModel.perform(action: .onAppear)
@@ -52,6 +43,21 @@ struct MainMenuView: View {
         .onDisappear {
             viewModel.perform(action: .onDisappear)
         }
+    }
+    
+    private var contentView: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 12) {
+                ForEach(viewModel.sections, id: \.identifier) {
+                    sectionView($0)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+            .padding(.bottom, 40)
+        }
+        .animation(.easeInOut, value: viewModel.sections)
     }
     
     private func sectionView(_ section: MainMenuViewModel.Section) -> some View {
@@ -119,14 +125,14 @@ struct MainMenuView: View {
 //                                     totalQuestions: viewModel.totalQuestions ?? 0,
 //                                     avatar: viewModel.avatar,
 //                                     onDailyStreakTapped: { viewModel.perform(action: .dailyStreakTapped) })
-                Text("learning") // TODO
+                Text("Chat") // TODO
             case .exam:
 //                if section.verticalSectionItems.contains(.exam) {
 //                    MainMenuVerticalCell(item: item)
 //                } else {
 //                    MainMenuHorizontalCell(item: item)
 //                }
-                Text("exam") // TODO
+                Text("Video generator") // TODO
             }
         }
 //        .buttonStyle(AlphaWhenPressedButtonStyle()) // TODO

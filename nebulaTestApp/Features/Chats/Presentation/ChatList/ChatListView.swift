@@ -31,18 +31,23 @@ struct ChatListView: View {
     }()
     
     var body: some View {
-        contentView
-            .ignoresSafeArea(edges: .bottom)
-            .toolbar {
-                toolBarTitle(placement: .principal)
-            }
-            .coloredNavigationBarBackButton()
-            .onAppear {
-                viewModel.perform(action: .onAppear)
-            }
-            .onDisappear {
-                viewModel.perform(action: .onDisappear)
-            }
+        ZStack {
+            Color.red // TODO
+                .ignoresSafeArea()
+            
+            contentView
+//                .ignoresSafeArea(edges: .bottom) // TODO
+        }
+        .toolbar {
+            toolBarTitle(placement: .principal)
+        }
+        .coloredNavigationBarBackButton()
+        .onAppear {
+            viewModel.perform(action: .onAppear)
+        }
+        .onDisappear {
+            viewModel.perform(action: .onDisappear)
+        }
     }
     
     private func toolBarTitle(placement: ToolbarItemPlacement) -> some ToolbarContent {
@@ -71,7 +76,7 @@ struct ChatListView: View {
         }
         .padding(.top, 16)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Color.backgroundMain) // TODO
+        .background(Color.red) // TODO
         .animation(.easeInOut, value: viewModel.isLoading)
         .animation(.easeInOut, value: viewModel.errorMessage)
         .animation(.easeInOut, value: viewModel.chatList)

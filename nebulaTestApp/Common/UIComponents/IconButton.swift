@@ -78,7 +78,7 @@ struct IconButtonWithBackground: View {
          imageColor: Color,
          imageSize: CGFloat = 20,
          buttonSize: CGFloat = 42,
-         backgroundColor: Color = .backgroundAlternative,
+         backgroundColor: Color = .background,
          action: @escaping () -> Void) {
         
         self.action = action

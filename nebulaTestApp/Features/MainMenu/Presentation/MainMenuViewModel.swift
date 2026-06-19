@@ -25,15 +25,14 @@ final class MainMenuViewModel: ViewModel {
     /// Subscriptions store
     private var cancellables = Set<AnyCancellable>()
     
-    @Injected private var chatsRepository: ChatsProvider
+    @Injected private var tokenStorage: TokenStorage
 
     /// Sections and items of sections for view
     @Published private(set) var sections = [Section]()
-    /// TODO
-    @Published private(set) var isLoading = false
     
     /// View on screen.
     private var isViewAppeared = false
+    private var credAlertIsShowed = false
     
     // MARK: - Initialization
     /// Base initializator.
@@ -71,7 +70,7 @@ final class MainMenuViewModel: ViewModel {
             let mock = Chat(id: "mockId1",
                             title: "title?",
                             updatedAt: .now)
-            coordinator.openChatScreen(for: mock) // TODO
+            coordinator.openChatScreen(for: mock) // TODO: where find new chatID ?
             
         case .exam:
             break // TODO
@@ -97,6 +96,7 @@ final class MainMenuViewModel: ViewModel {
     
     private func actionsAfterAppear() {
         reloadSections()
+        showCredentialAlertIfNeeded()
     }
     
     private func reloadSections() { // TODO
@@ -117,29 +117,18 @@ final class MainMenuViewModel: ViewModel {
         self.sections = sections
     }
     
-    private func getChats() { // TODO: delete
-        Task { [weak self] in
-            guard let self else { return }
-            
-            await MainActor.run {
-                self.isLoading = true
+    private func showCredentialAlertIfNeeded() {
+#if DEBUG
+        let token = tokenStorage.getToken()
+        let userId = tokenStorage.getUserID()
+
+        if !credAlertIsShowed && (token == "YOUR_TOKEN_HERE" || userId == "YOUR_USER_ID_HERE") {
+            let item = AlertItem.setupCredentialsAlertItem { [weak self] in
+                self?.credAlertIsShowed = true
             }
-            
-            let result = await chatsRepository.getChatsList()
-            
-            await MainActor.run {
-                guard self.isViewAppeared else { return }
-                
-                self.isLoading = false
-                
-                switch result {
-                case .success(let chats):
-                    print(chats) // TODO
-                case .failure(let error):
-                    print(error) // TODO
-                }
-            }
+            coordinator.showAlert(item)
         }
+#endif
     }
     
 }

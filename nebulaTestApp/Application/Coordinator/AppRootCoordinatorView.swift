@@ -16,8 +16,7 @@ struct AppRootCoordinatorView: View {
         TabView(selection: $coordinator.tab) {
             HomeCoordinatorView(coordinator: coordinator.mainMenuCoordinator)
                 .tabItem {
-                    Label(Str.Common.languageCode, // TODO
-                          image: CommonImages.TabBar.home.name)
+                    Label("home", image: "") // now unused
                 }
                 .tag(AppTab.home)
         }
