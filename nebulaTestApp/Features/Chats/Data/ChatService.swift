@@ -13,8 +13,6 @@ final class ChatService: ChatAPI {
     private let networkService: NetworkService
     private let tokenStorage: TokenStorage
     
-    private lazy var decoder = JSONDecoder()
-    
     /// Initialization
     /// - Parameter networkService: network service
     /// - Parameter tokenStorage: token storage
@@ -46,8 +44,8 @@ final class ChatService: ChatAPI {
             let data = try await networkService.performRequest(endpoint: endpoint)
             
             do {
-                let list = try decoder.decode([ChatDTO].self,
-                                              from: data)
+                let list = try JSONDecoder().decode([ChatDTO].self,
+                                                    from: data)
                 return .success(list)
             } catch {
                 return .failure(NetworkError.decodingFailed)
