@@ -5,9 +5,9 @@
 //  Created by A Ch on 18.06.2026.
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 /// Home tab coordinator
 final class HomeTabCoordinator: Coordinator {
@@ -85,6 +85,30 @@ extension HomeTabCoordinator {
     /// Screens for navigation.
     @MainActor
     enum Path: Hashable {
-        case chooseTicket(context: FlowModelContext<MainMenuViewModel>) // TODO
+        case chat(context: FlowModelContext<ChatViewModel>)
+        case chatList(context: FlowModelContext<ChatListViewModel>)
     }
+}
+
+// MARK: Chats
+extension HomeTabCoordinator {
+    
+    /// Open screen of chat.
+    /// - Parameter chat: chat data
+    func openChatScreen(for chat: Chat) {
+        let item = HomeTabCoordinator.Path.chat(
+            context: FlowModelContext(model: ChatViewModel(coordinator: self,
+                                                           chat: chat))
+        )
+        path.append(item)
+    }
+    
+    /// Open screen of chat list.
+    func openChatListScreen() {
+        let item = HomeTabCoordinator.Path.chatList(
+            context: FlowModelContext(model: ChatListViewModel(coordinator: self))
+        )
+        path.append(item)
+    }
+    
 }

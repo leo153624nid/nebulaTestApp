@@ -14,3 +14,15 @@
 "Common.no" = "No";
 "Common.ok" = "OK";
 "Common.appName" = "NebulaTestApp";
+
+// MARK: - MainMenu
+
+"MainMenu.header" = "Your AI tools,\nready to go";
+
+// MARK: - ChatView
+
+"ChatView.screenTitle" = "AI Chat";
+
+// MARK: - ChatListView
+
+"ChatListView.screenTitle" = "AI Chat History";

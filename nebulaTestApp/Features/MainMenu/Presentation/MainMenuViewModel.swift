@@ -68,7 +68,10 @@ final class MainMenuViewModel: ViewModel {
     private func handleSectionItemTapped(_ item: SectionItem) {
         switch item {
         case .learning:
-            break // TODO
+            let mock = Chat(id: "mockId1",
+                            title: "title?",
+                            updatedAt: .now)
+            coordinator.openChatScreen(for: mock) // TODO
             
         case .exam:
             break // TODO
@@ -116,7 +119,7 @@ final class MainMenuViewModel: ViewModel {
         self.sections = sections
     }
     
-    private func getChats() {
+    private func getChats() { // TODO: delete
         Task { [weak self] in
             guard let self else { return }
             

@@ -18,9 +18,11 @@ struct HomeCoordinatorView: View {
                 .navigationDestination(for: HomeTabCoordinator.Path.self) { destination in
                     Group {
                         switch destination {
-                        case .chooseTicket(let context):
-//                            ChooseTicketView(viewModel: context.viewModel) // TODO
-                            EmptyView()
+                        case .chat(let context):
+                            ChatView(viewModel: context.viewModel)
+                            
+                        case .chatList(let context):
+                            ChatListView(viewModel: context.viewModel)
                             
                         }
                     }

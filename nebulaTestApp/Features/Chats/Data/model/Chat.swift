@@ -13,14 +13,34 @@ struct Chat {
     let id: String
     /// Title
     let title: String?
+    /// Updated date
+    let updatedAt: Date
+    
+    /// Initialization
+    /// - Parameters:
+    ///   - id: chat id
+    ///   - title: title
+    ///   - updatedAt: updated date
+    init (id: String,
+          title: String? = nil,
+          updatedAt: Date) {
+        self.id = id
+        self.title = title
+        self.updatedAt = updatedAt
+    }
 }
 
 /// Chat data transfer object
 struct ChatDTO: Codable {
+    /// Chat id
     let id: String
+    /// Title
     let title: String?
+    /// User id
     let personaId: Int?
+    /// Updated date
     let updatedAt: String
+    /// Last message preview
     let lastMessagePreview: String?
     
     enum CodingKeys: String, CodingKey {

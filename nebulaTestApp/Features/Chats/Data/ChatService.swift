@@ -20,7 +20,7 @@ final class ChatService: ChatAPI {
     
     /// Download list of chats
     /// - Returns: chats array or error
-    func downloadChatsList() async -> Result<[ChatDTO], NetworkError> {
+    func downloadChatsList() async -> Result<[ChatDTO], NetworkError> { // TODO: check Validation Error from server
         let endpoint = BaseNetworkEndPoint(baseURL: Constants.baseURL + "/chats",
                                            headers: [
                                             "accept": "application/json",
