@@ -23,10 +23,10 @@ extension UITabBar {
         tabBarAppearance.shadowImage = nil
         
         let stackedLayoutAppearance = tabBarAppearance.stackedLayoutAppearance
-        stackedLayoutAppearance.selected.iconColor = UIColor(resource: .brandPrimary)
-        stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(resource: .brandPrimary)]
-        stackedLayoutAppearance.normal.iconColor = UIColor(resource: .neutralSecondary)
-        stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(resource: .neutralSecondary)]
+        stackedLayoutAppearance.selected.iconColor = UIColor(resource: .accentGradientEnd)
+        stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(resource: .accentGradientEnd)]
+        stackedLayoutAppearance.normal.iconColor = UIColor(resource: .card)
+        stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(resource: .textSecondary)]
         
         tabBar.standardAppearance = tabBarAppearance
         tabBar.scrollEdgeAppearance = tabBarAppearance

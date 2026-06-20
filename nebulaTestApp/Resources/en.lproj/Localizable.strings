@@ -25,6 +25,14 @@
 // MARK: - MainMenu
 
 "MainMenu.header" = "Your AI tools,\nready to go";
+"MainMenu.chatButtonTitle" = "Ask anything...";
+"MainMenu.VideoButton.title" = "Turn Photo\nintoVideo";
+"MainMenu.VideoButton.desc" = "Animate • Templates";
+"MainMenu.VideoButton.footer" = "Ready in seconds";
+"MainMenu.WritingButton.title" = "Fix & Improve\nWriting";
+"MainMenu.WritingButton.desc" = "Rewrite • Fix grammar";
+"MainMenu.UnderstandButton.title" = "Understand\nFaster";
+"MainMenu.UnderstandButton.desc" = "Summarize • Key points";
 
 // MARK: - ChatView
 

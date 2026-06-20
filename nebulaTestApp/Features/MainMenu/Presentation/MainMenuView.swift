@@ -13,14 +13,6 @@ struct MainMenuView: View {
     /// ViewModel
     @ObservedObject var viewModel: MainMenuViewModel
     
-    private let tabbarStandartVisibility: Visibility = { // Fix differents between showing tabbar in ios 18 and lower
-        if #available(iOS 18.0, *) {
-            .automatic
-        } else {
-            .visible
-        }
-    }()
-    
     /// Initialization
     ///
     /// - Parameter viewModel: view model
@@ -29,14 +21,13 @@ struct MainMenuView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack(alignment: .topLeading) { // TODO: add gradient at top
             Color.background
                 .ignoresSafeArea()
             
             contentView
         }
-        .toolbar(true ? .hidden : tabbarStandartVisibility, // TODO: now is allways hidden
-                 for: .tabBar)
+        .toolbar(.hidden, for: .tabBar) // now is allways hidden
         .onAppear {
             viewModel.perform(action: .onAppear)
         }
@@ -46,97 +37,237 @@ struct MainMenuView: View {
     }
     
     private var contentView: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 12) {
-                ForEach(viewModel.sections, id: \.identifier) {
-                    sectionView($0)
-                }
+        ScrollView(showsIndicators: false) {
+            LazyVStack(alignment: .leading, spacing: 0) {
+                controlView
+                    .padding(.bottom, 20)
+                
+                headerView
+                    .padding(.bottom, 32)
+                
+                cardsView
+                    .padding(.bottom, 20)
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 16)
-            .padding(.top, 8)
-            .padding(.bottom, 40)
         }
-        .animation(.easeInOut, value: viewModel.sections)
     }
     
-    private func sectionView(_ section: MainMenuViewModel.Section) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            switch section.identifier {
-            case .main:
-                mainSectionView(section: section)
-            case .survey:
-                ForEach(section.items, id: \.rawValue) { item in
-                    itemView(item,
-                             from: section)
-                }
-                .padding(.top, 20)
-            case .more:
-                Text(section.header ?? "")
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundStyle(Color.textPrimary)
-                    .padding(.top, 20)
-                    .padding(.bottom, 4)
-                
-                ForEach(section.items, id: \.rawValue) {
-                    itemView($0,
-                             from: section)
-                }
+    private var controlView: some View {
+        VStack(alignment: .trailing, spacing: 0) {
+            IconButton(image: CommonImages.MainMenu.settings.swiftUIImage,
+                       color: .accent.opacity(0.4),
+                       size: 28) {
+                viewModel.perform(action: .settingsButtonClicked)
             }
+                       .padding(.all, 6)
         }
+        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
     
-    private func mainSectionView(section: MainMenuViewModel.Section) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            let firstVerticalItem = section.verticalSectionItems.first ?? .exam
-            let secondVerticalItem = section.verticalSectionItems.last ?? .exam
+    private var headerView: some View {
+        VStack(spacing: 20) {
+            CommonImages.MainMenu.stars.swiftUIImage
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
             
-            ForEach(section.items, id: \.rawValue) { item in
-                if item == firstVerticalItem && section.hasTwoVerticalCells {
-                    HStack(spacing: 12) {
-                        itemView(firstVerticalItem,
-                                 from: section)
-                        
-                        itemView(secondVerticalItem,
-                                 from: section)
-                    }
-                } else if item == secondVerticalItem && section.hasTwoVerticalCells {
-                    // returns an empty view to avoid duplication vertical views
-                    EmptyView()
-                } else {
-                    itemView(item,
-                             from: section)
-                }
-            }
+            Text(Str.MainMenu.header)
+                .font(.system(size: 28, weight: .bold))
+                .foregroundStyle(Color.textAccent)
+                .multilineTextAlignment(.center)
+            
+            chatButtonView
         }
+        .frame(maxWidth: .infinity)
     }
     
-    @ViewBuilder
-    private func itemView(_ item: MainMenuViewModel.SectionItem,
-                          from section: MainMenuViewModel.Section) -> some View {
+    private var chatButtonView: some View {
         Button {
-            viewModel.perform(action: .sectionItemTapped(item))
+            viewModel.perform(action: .chatButtonClicked)
         } label: {
-            switch item {
-            case .learning:
-//                MainMenuLearningCell(subtitle: viewModel.learningSubtitle,
-//                                     dailyStreak: viewModel.dailyStreak ?? 0,
-//                                     completedQuestions: viewModel.completedQuestions ?? 0,
-//                                     totalQuestions: viewModel.totalQuestions ?? 0,
-//                                     avatar: viewModel.avatar,
-//                                     onDailyStreakTapped: { viewModel.perform(action: .dailyStreakTapped) })
-                Text("Chat") // TODO
-            case .exam:
-//                if section.verticalSectionItems.contains(.exam) {
-//                    MainMenuVerticalCell(item: item)
-//                } else {
-//                    MainMenuHorizontalCell(item: item)
-//                }
-                Text("Video generator") // TODO
+            ZStack(alignment: .center) {
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .accentGradientStart.opacity(0.7),
+                                .accentGradientEnd.opacity(0.7)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(height: 56)
+                    .clipShape(RoundedCorners(radius: 24))
+                
+                Color.card
+                    .frame(height: 52)
+                    .clipShape(RoundedCorners(radius: 24))
+                
+                HStack(spacing: 16) {
+                    CommonImages.MainMenu.smallStars.swiftUIImage
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(Color.accent)
+                        .frame(width: 24, height: 24)
+                    
+                    Text(Str.MainMenu.chatButtonTitle)
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundStyle(Color.textAccent.opacity(0.4))
+                }
+                .padding(.horizontal, 16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(AlphaWhenPressedButtonStyle())
+    }
+    
+    private var cardsView: some View {
+        HStack(spacing: 8) {
+            videoGenButton
+            
+            VStack(spacing: 8) {
+                extraCard(icon: CommonImages.MainMenu.magicPencil.swiftUIImage,
+                          title: Str.MainMenu.WritingButton.title,
+                          desc: Str.MainMenu.WritingButton.desc,
+                          action: { viewModel.perform(action: .fixWritingButtonClicked) })
+                
+                extraCard(icon: CommonImages.MainMenu.magicPrompt.swiftUIImage,
+                          title: Str.MainMenu.UnderstandButton.title,
+                          desc: Str.MainMenu.UnderstandButton.desc,
+                          action: { viewModel.perform(action: .understandButtonClicked) })
             }
         }
-//        .buttonStyle(AlphaWhenPressedButtonStyle()) // TODO
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity)
+    }
+    
+    private var videoGenButton: some View {
+        Button {
+            viewModel.perform(action: .videoButtonClicked)
+        } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                // Icon with background
+                ZStack {
+                    Circle()
+                        .fill(Color.accent.opacity(0.05))
+                        
+                    CommonImages.MainMenu.imageToImage.swiftUIImage
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(Color.accent)
+                        .frame(width: 20, height: 20)
+                }
+                .frame(width: 36, height: 36)
+                .padding(.top, 10)
+                .padding(.bottom, 16)
+                
+                // Title
+                Text(Str.MainMenu.VideoButton.title)
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundStyle(Color.textAccent)
+                    .multilineTextAlignment(.leading)
+                    .padding(.bottom, 10)
+                
+                // Description
+                Text(Str.MainMenu.VideoButton.desc)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(Color.textAccent.opacity(0.4))
+                    .lineLimit(1)
+                
+                Spacer(minLength: 26)
+                
+                // Footer
+                ZStack {
+                    Color.accent
+                        .opacity(0.3)
+                        .clipShape(RoundedCorners(radius: 24))
+                    
+                    HStack(spacing: 8) {
+                        Text(Str.MainMenu.VideoButton.footer)
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundStyle(Color.textAccent)
+                            .lineLimit(1)
+                        
+                        CommonImages.MainMenu.play.swiftUIImage
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(Color.accent)
+                            .frame(width: 10, height: 10)
+                            .padding(.all, 3)
+                    }
+                }
+                .frame(height: 32)
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 4)
+            }
+            .padding(.all, 16)
+            .frame(height: 313)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .background(
+                ZStack {
+                    LinearGradient(
+                        colors: [
+                            .accentGradientStart.opacity(0.7),
+                            .accentGradientEnd.opacity(0.7)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    
+                    CommonImages.MainMenu.curve.swiftUIImage
+                        .resizable()
+                        .scaledToFill()
+                }
+            )
+            .clipShape(RoundedCorners(radius: 24))
+        }
+        .buttonStyle(AlphaWhenPressedButtonStyle())
+    }
+    
+    private func extraCard(icon: Image,
+                           title: String,
+                           desc: String,
+                           action: @escaping () -> Void) -> some View {
+        Button {
+            action()
+        } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                // Icon with background
+                ZStack {
+                    Circle()
+                        .fill(Color.accent.opacity(0.05))
+                        
+                    icon
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                }
+                .frame(width: 36, height: 36)
+                
+                Spacer(minLength: 8)
+                
+                // Title
+                Text(title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(Color.textAccent)
+                    .multilineTextAlignment(.leading)
+                    .padding(.bottom, 8)
+                
+                // Description
+                Text(desc)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.textAccent.opacity(0.4))
+                    .lineLimit(1)
+            }
+            .padding(.all, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.card.opacity(0.7))
+            .clipShape(RoundedCorners(radius: 24))
+        }
+        .buttonStyle(AlphaWhenPressedButtonStyle())
     }
   
 }

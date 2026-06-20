@@ -23,7 +23,7 @@ struct ColoredNavigationBarBackButton: ViewModifier {
     ///
     /// - Parameter color: color of button icon
     /// - Parameter onBack: action on button tapped
-    init(color: Color = .neutralSecondary, isEnabled: Bool, onBack: (() -> Void)? = nil) {
+    init(color: Color = .accent, isEnabled: Bool, onBack: (() -> Void)? = nil) {
         self.color = color
         self.onBack = onBack
         self.isEnabled = isEnabled
@@ -59,7 +59,7 @@ struct ColoredNavigationBarBackButton: ViewModifier {
                         .frame(width: 44, height: 44)
                         .contentShape(Rectangle())
                     
-                    CommonImages.Navigation.angleLeft.swiftUIImage
+                    CommonImages.Navigation.arrow.swiftUIImage
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
@@ -73,7 +73,7 @@ struct ColoredNavigationBarBackButton: ViewModifier {
 
 extension View {
     /// Apply modifier with colored special navigation bar Back button without text
-    func coloredNavigationBarBackButton(_ color: Color = .neutralSecondary,
+    func coloredNavigationBarBackButton(_ color: Color = .accent,
                                         isEnabled: Bool = true,
                                         action: ( () -> Void )? = nil) -> some View {
         modifier(ColoredNavigationBarBackButton(color: color,

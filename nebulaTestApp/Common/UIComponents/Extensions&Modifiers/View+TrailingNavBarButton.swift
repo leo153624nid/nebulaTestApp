@@ -10,7 +10,7 @@ import SwiftUI
 /// Add IconButton for trailing NavBar item
 extension View {
     func trailingNavBarButton(image: Image?,
-                              color: Color? = .accentPrimary,
+                              color: Color? = .accent,
                               size: CGFloat = 24,
                               action: @escaping () -> Void) -> some View {
         toolbar {
@@ -30,7 +30,7 @@ extension View {
     }
     
     private func customToolBarItem(image: Image?,
-                                   color: Color? = .accentPrimary,
+                                   color: Color? = .accent,
                                    size: CGFloat = 24,
                                    action: @escaping () -> Void) -> some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {

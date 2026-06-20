@@ -112,15 +112,15 @@ struct IconButtonWithBackground: View {
 #Preview {
     VStack(spacing: 16) {
         IconButton(image: CommonImages.Navigation.close.swiftUIImage,
-                   color: .accentPrimary,
+                   color: .red,
                    size: 24,
                    action: { })
         
-        IconButtonWithBackground(image: CommonImages.Navigation.angleDown.swiftUIImage,
-                                 imageColor: .brandPrimary,
+        IconButtonWithBackground(image: CommonImages.Navigation.arrow.swiftUIImage,
+                                 imageColor: .purple,
                                  imageSize: 20,
                                  buttonSize: 42,
-                                 backgroundColor: .neutralSecondary,
+                                 backgroundColor: .gray,
                                  action: { })
     }
 }
