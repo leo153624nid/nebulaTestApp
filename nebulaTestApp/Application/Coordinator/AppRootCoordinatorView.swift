@@ -16,7 +16,7 @@ struct AppRootCoordinatorView: View {
         TabView(selection: $coordinator.tab) {
             HomeCoordinatorView(coordinator: coordinator.mainMenuCoordinator)
                 .tabItem {
-                    Label("home", image: "") // now unused
+                    Label("home", image: CommonImages.TabBar.home.name) // now unused
                 }
                 .tag(AppTab.home)
         }

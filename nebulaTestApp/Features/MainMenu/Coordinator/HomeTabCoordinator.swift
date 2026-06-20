@@ -96,9 +96,13 @@ extension HomeTabCoordinator {
     /// Open screen of chat.
     /// - Parameter chat: chat data
     func openChatScreen(for chat: Chat) {
+        let comeFromList = path.contains(where: {
+            return if case .chatList = $0 { true } else { false }
+        })
         let item = HomeTabCoordinator.Path.chat(
             context: FlowModelContext(model: ChatViewModel(coordinator: self,
-                                                           chat: chat))
+                                                           chat: chat,
+                                                           comeFromList: comeFromList))
         )
         path.append(item)
     }

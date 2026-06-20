@@ -25,6 +25,8 @@ final class ChatViewModel: ViewModel {
     
     /// Chat data
     let chat: Chat
+    /// Screen opened from chat list
+    let comeFromList: Bool
     
     /// Search text
     @Published var searchText = "" // TODO
@@ -39,16 +41,21 @@ final class ChatViewModel: ViewModel {
     convenience init(coordinator: HomeTabCoordinator) {
         self.init(coordinator: coordinator,
                   chat: Chat(id: "TODO", // TODO: how setup chat_id ?
-                             updatedAt: .now))
+                             updatedAt: .now),
+                  comeFromList: false)
     }
     
     /// Initializator
     ///
     /// - Parameter coordinator: coordinator
     /// - Parameter chat: chat data
-    init(coordinator: HomeTabCoordinator, chat: Chat) {
+    /// - Parameter comeFromList: screen opened from chat list
+    init(coordinator: HomeTabCoordinator,
+         chat: Chat,
+         comeFromList: Bool) {
         self.coordinator = coordinator
         self.chat = chat
+        self.comeFromList = comeFromList
         setupUpdates()
     }
     

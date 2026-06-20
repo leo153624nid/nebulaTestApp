@@ -29,11 +29,4 @@ extension Date {
 
         return formatter.string(from: self)
     }
-    
-    /// Date string for display
-    func toDisplayString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy"
-        return formatter.string(from: self)
-    }
 }

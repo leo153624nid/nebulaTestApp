@@ -15,7 +15,8 @@ struct ChatsMapper {
     func chatToDomain(_ dto: ChatDTO) -> Chat {
         return Chat(id: dto.id,
                     title: dto.title,
-                    updatedAt: isoStringToDate(dto.updatedAt) ?? .now)
+                    updatedAt: isoStringToDate(dto.updatedAt) ?? .now,
+                    lastMessagePreview: dto.lastMessagePreview)
     }
     
     /// Convert array of chat dto to domain

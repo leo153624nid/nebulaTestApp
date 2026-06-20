@@ -27,13 +27,15 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
     
     @Injected private var chatsRepository: ChatsProvider
     
-    /// Array of chats
-    @Published private(set) var chatList: [Chat] = []
+    /// Array of section with grouped chats
+    @Published private(set) var sections: [ChatSection] = []
     /// View is loading chat list
     @Published private(set) var isLoading = false
     /// Error message
     @Published private(set) var errorMessage: String?
     
+    private var chatList: [Chat] = []
+    private var groupingTask: Task<Void, Never>?
     /// View on screen.
     private var isViewAppeared = false
     
@@ -58,10 +60,11 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
             coordinator.openChatScreen(for: chat)
             
         case .pullToRefresh:
-            break // TODO
+            getChats()
             
         case .onAppear:
             isViewAppeared = true
+            getChats()
             
         case .onDisappear:
             isViewAppeared = false
@@ -70,6 +73,8 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
     
     // MARK: - Private methods
     private func getChats() {
+        guard !isLoading else { return }
+        
         Task { [weak self] in
             guard let self else { return }
             
@@ -86,11 +91,27 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
                 
                 switch result {
                 case .success(let chats):
-                    self.chatList = chats
+                    self.setupChats(with: chats)
                 case .failure(let error):
-                    print(error) // TODO
                     self.errorMessage = error.localizedDescription
                 }
+            }
+        }
+    }
+    
+    private func setupChats(with newChats: [Chat]) {
+        chatList = newChats
+        
+        groupingTask?.cancel()
+        groupingTask = Task.detached(priority: .userInitiated) { [weak self] in
+            guard let self else { return }
+            
+            let grouped = Self.groupedAndSorted(newChats)
+            
+            guard !Task.isCancelled else { return }
+            
+            await MainActor.run {
+                self.sections = grouped
             }
         }
     }
@@ -101,5 +122,27 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
 private extension ChatListViewModel {
     func setupUpdates() {
 
+    }
+}
+
+// MARK: - Setup Data
+extension ChatListViewModel {
+    
+    struct ChatSection: Identifiable, Equatable {
+        let id: Date // дата уникальна для секции, годится как id
+        let chats: [Chat]
+    }
+    
+    nonisolated private static func groupedAndSorted(_ chats: [Chat]) -> [ChatSection] {
+        let grouped = Dictionary(grouping: chats) {
+            Calendar.current.startOfDay(for: $0.updatedAt)
+        }
+        
+        return grouped
+            .map { date, chats in
+                ChatSection(id: date,
+                            chats: chats.sorted { $0.updatedAt > $1.updatedAt })
+            }
+            .sorted { $0.id > $1.id }
     }
 }

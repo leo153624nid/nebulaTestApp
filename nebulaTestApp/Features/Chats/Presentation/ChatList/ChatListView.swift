@@ -10,33 +10,19 @@ import SwiftUI
 /// Chat view
 struct ChatListView: View {
     
-    // MARK: State
     /// ViewModel
     @ObservedObject var viewModel: ChatListViewModel
     
-    // MARK: Dimensions
-    /// Next button height
-    private let nextButtonHeight: CGFloat = 44
-    /// Spacing between adjacent state cells
-    private let stateItemSpacing: CGFloat = 8
-    /// Spacing between sections
-    private let sectionVerticalSpacing: CGFloat = 16
-    /// Padding for fixing visible tabbar inset bug
-    private let specialBottomPadding: CGFloat = {
-        return if #available(iOS 26.0, *) {
-            50
-        } else {
-            0
-        }
-    }()
-    
     var body: some View {
         ZStack {
-            Color.red // TODO
+            Color.background
                 .ignoresSafeArea()
             
             contentView
-//                .ignoresSafeArea(edges: .bottom) // TODO
+                .refreshable {
+                    viewModel.perform(action: .pullToRefresh)
+                }
+                .preferredColorScheme(.dark)
         }
         .toolbar {
             toolBarTitle(placement: .principal)
@@ -54,7 +40,7 @@ struct ChatListView: View {
         ToolbarItem(placement: placement) {
             Text(Str.ChatListView.screenTitle)
                 .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(.textPrimary) // TODO
+                .foregroundStyle(.textAccent)
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
         }
@@ -63,39 +49,46 @@ struct ChatListView: View {
     private var contentView: some View {
         VStack(alignment: .leading) {
             if viewModel.isLoading {
+                
                 loadingView
+                
             } else if let message = viewModel.errorMessage {
+                
                 messageView(title: Str.ChatListView.Error.title,
                             description: message)
-            } else if viewModel.chatList.isEmpty {
+                
+            } else if viewModel.sections.isEmpty {
+                
                 messageView(title: Str.ChatListView.EmptyList.title,
                             description: Str.ChatListView.EmptyList.desc)
+                
             } else {
+                
                 listView
+                
             }
         }
-        .padding(.top, 16)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(Color.red) // TODO
         .animation(.easeInOut, value: viewModel.isLoading)
         .animation(.easeInOut, value: viewModel.errorMessage)
-        .animation(.easeInOut, value: viewModel.chatList)
+        .animation(.easeInOut, value: viewModel.sections)
     }
     
     private func messageView(title: String,
                              description: String) -> some View {
         VStack(spacing: 8) {
-            Rectangle() // TODO: add pic
-                .fill(Color.yellow) // TODO
+            CommonImages.MainMenu.magicPencil.swiftUIImage
+                .resizable()
+                .scaledToFit()
                 .frame(width: 60, height: 60)
             
             Text(title)
                 .font(.system(size: 28, weight: .bold))
-                .foregroundStyle(Color.accentGradientEnd) // TODO
+                .foregroundStyle(Color.textAccent)
             
             Text(description)
                 .font(.system(size: 16, weight: .regular))
-                .foregroundStyle(Color.textSecondary) // TODO
+                .foregroundStyle(Color.textAccent.opacity(0.3))
                 .multilineTextAlignment(.center)
         }
         .padding(.horizontal, 16)
@@ -104,8 +97,8 @@ struct ChatListView: View {
     
     private var loadingView: some View {
         ZStack {
-            ProgressView() // TODO: update color
-                .progressViewStyle(CircularProgressViewStyle())
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .accent))
                 .frame(width: 20, height: 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -113,19 +106,42 @@ struct ChatListView: View {
     
     private var listView: some View {
         ScrollView {
-            LazyVStack(spacing: stateItemSpacing) {
-                ForEach(viewModel.chatList, id: \.id) { chat in
-                    Text(chat.updatedAt.toDisplayString()) // TODO: update cell
-                    .equatable()
-                    .transition(.opacity)
-                    .onTapGesture {
-                        viewModel.perform(action: .selectChat(chat))
+            LazyVStack(spacing: 10, pinnedViews: [.sectionHeaders]) {
+                ForEach(viewModel.sections) { section in
+                    Section {
+                        ForEach(section.chats, id: \.id) {
+                            chatCellView($0)
+                                .transition(.opacity)
+                        }
+                    } header: {
+                        sectionHeaderView(section.id)
                     }
                 }
             }
-            .padding(.bottom, nextButtonHeight + 2 * stateItemSpacing + specialBottomPadding) // fixing visible tabbar inset bug // TODO
             .padding(.horizontal, 16)
         }
+        .toolbarBackground(Color.background, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+    }
+    
+    private func chatCellView(_ chat: Chat) -> some View {
+        Button {
+            viewModel.perform(action: .selectChat(chat))
+        } label: {
+            ChatCellView(chat: chat)
+        }
+        .buttonStyle(AlphaWhenPressedButtonStyle())
+    }
+    
+    private func sectionHeaderView(_ date: Date) -> some View {
+        Text(date.toSectionHeaderString())
+            .font(.system(size: 20, weight: .semibold))
+            .foregroundStyle(Color.textAccent)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 20)
+            .padding(.bottom, 10)
+            .background(Color.background)
     }
     
 }

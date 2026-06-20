@@ -30,8 +30,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         
         /// apply tabbar style
         UITabBar.updateStyle()
-        /// apply navbar style
-        UINavigationBar.updateStyle()
         
         return true
     }

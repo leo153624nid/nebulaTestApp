@@ -13,6 +13,8 @@
 "Common.yes" = "Yes";
 "Common.no" = "No";
 "Common.ok" = "OK";
+"Common.today" = "Today";
+"Common.yesterday" = "Yesterday";
 "Common.appName" = "NebulaTestApp";
 
 // MARK: - Network Error

@@ -15,18 +15,23 @@ struct Chat: Equatable {
     let title: String?
     /// Updated date
     let updatedAt: Date
+    /// Last message preview
+    let lastMessagePreview: String?
     
     /// Initialization
     /// - Parameters:
     ///   - id: chat id
     ///   - title: title
     ///   - updatedAt: updated date
+    ///   - lastMessagePreview: preview last message
     init (id: String,
           title: String? = nil,
-          updatedAt: Date) {
+          updatedAt: Date,
+          lastMessagePreview: String? = nil) {
         self.id = id
         self.title = title
         self.updatedAt = updatedAt
+        self.lastMessagePreview = lastMessagePreview
     }
 }
 

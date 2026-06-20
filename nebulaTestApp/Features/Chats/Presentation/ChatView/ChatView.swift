@@ -42,7 +42,8 @@ struct ChatView: View {
             contentView
         }
         .trailingNavBarButton(image: CommonImages.Navigation.union.swiftUIImage,
-                              color: .accent) { [weak viewModel] in
+                              color: .accent,
+                              enabled: !viewModel.comeFromList) { [weak viewModel] in
             // Need a weak viewModel, because toolbar capture it
             viewModel?.perform(action: .listButtonTapped)
         }

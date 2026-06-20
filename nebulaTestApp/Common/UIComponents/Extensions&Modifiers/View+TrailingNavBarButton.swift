@@ -12,19 +12,30 @@ extension View {
     func trailingNavBarButton(image: Image?,
                               color: Color? = .accent,
                               size: CGFloat = 24,
+                              enabled: Bool = true,
                               action: @escaping () -> Void) -> some View {
-        toolbar {
-            if #available(iOS 26.0, *) {
-                customToolBarItem(image: image,
-                                  color: color,
-                                  size: size,
-                                  action: action)
-                .sharedBackgroundVisibility(.hidden)
+        Group {
+            if enabled {
+                
+                toolbar {
+                    if #available(iOS 26.0, *) {
+                        customToolBarItem(image: image,
+                                          color: color,
+                                          size: size,
+                                          action: action)
+                        .sharedBackgroundVisibility(.hidden)
+                    } else {
+                        customToolBarItem(image: image,
+                                          color: color,
+                                          size: size,
+                                          action: action)
+                    }
+                }
+                
             } else {
-                customToolBarItem(image: image,
-                                  color: color,
-                                  size: size,
-                                  action: action)
+                
+                self
+                
             }
         }
     }
