@@ -56,3 +56,56 @@ struct ChatDTO: Codable {
         case lastMessagePreview = "last_message_preview"
     }
 }
+
+// MARK: Mocks
+#if DEBUG
+extension Chat {
+    static let mockList: [Chat] = [
+        .init(id: "a1",
+              title: "title",
+              updatedAt: .now,
+              lastMessagePreview: "last message"),
+        .init(id: "a2",
+              title: "title",
+              updatedAt: .now,
+              lastMessagePreview: "last message"),
+        .init(id: "a3",
+              title: nil,
+              updatedAt: .daysAgo(1),
+              lastMessagePreview: "last message"),
+        .init(id: "a4",
+              title: nil,
+              updatedAt: .daysAgo(1),
+              lastMessagePreview: "last message"),
+        .init(id: "a5",
+              title: nil,
+              updatedAt: .daysAgo(7),
+              lastMessagePreview: nil),
+        .init(id: "a6",
+              title: nil,
+              updatedAt: .daysAgo(7),
+              lastMessagePreview: nil),
+        .init(id: "a7",
+              title: "title",
+              updatedAt: .daysAgo(7),
+              lastMessagePreview: "last message"),
+        .init(id: "a8",
+              title: "title",
+              updatedAt: .daysAgo(8),
+              lastMessagePreview: "last message"),
+    ]
+}
+
+extension Date {
+    /// Возвращает дату, отстоящую от self на заданное количество дней
+    /// - Parameter days: количество дней (отрицательное — в прошлое, положительное — в будущее)
+    /// - Returns: новая дата
+    func adding(days: Int) -> Date {
+        Calendar.current.date(byAdding: .day, value: days, to: self) ?? self
+    }
+    
+    static func daysAgo(_ days: Int) -> Date {
+        Date.now.adding(days: -days)
+    }
+}
+#endif

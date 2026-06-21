@@ -43,6 +43,15 @@ enum DesignedAlertType {
 
 // MARK: - Ready alerts
 extension AlertItem {
+    /// Alert item for new chat id error
+    static func newChatIdAlertItem() -> AlertItem {
+        AlertItem(title: "Error", // TODO: localize
+                  message: "No chat id", // TODO: localize
+                  actions: [
+                    AlertAction(title: Str.Common.ok, action: {})
+                  ])
+    }
+    
 #if DEBUG
     /// Alert item for setup prod credentials
     static func setupCredentialsAlertItem(completion: @escaping () -> Void) -> AlertItem {
@@ -53,4 +62,5 @@ extension AlertItem {
                   ])
     }
 #endif
+    
 }

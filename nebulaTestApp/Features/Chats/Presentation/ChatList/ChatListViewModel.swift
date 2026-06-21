@@ -22,8 +22,6 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
     // MARK: - Properties
     /// Own coordinator
     unowned let coordinator: HomeTabCoordinator
-    /// Subscriptions store
-    private var cancellables = Set<AnyCancellable>()
     
     @Injected private var chatsRepository: ChatsProvider
     
@@ -46,7 +44,6 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
     /// - Parameter coordinator: coordinator
     init(coordinator: HomeTabCoordinator) {
         self.coordinator = coordinator
-        setupUpdates()
         getChats()
     }
     
@@ -87,14 +84,14 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
             await MainActor.run {
                 guard self.isViewAppeared else { return }
                 
-                self.isLoading = false
-                
                 switch result {
                 case .success(let chats):
                     self.setupChats(with: chats)
                 case .failure(let error):
                     self.errorMessage = error.localizedDescription
                 }
+                
+                self.isLoading = false
             }
         }
     }
@@ -116,13 +113,6 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
         }
     }
     
-}
-
-// MARK: - Updates
-private extension ChatListViewModel {
-    func setupUpdates() {
-
-    }
 }
 
 // MARK: - Setup Data

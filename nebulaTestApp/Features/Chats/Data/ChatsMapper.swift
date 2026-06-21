@@ -26,10 +26,26 @@ struct ChatsMapper {
         dtos.map(chatToDomain)
     }
     
+    /// Convert message dto to domain
+    /// - Parameter dto: message dto
+    /// - Returns: message domain
+    func messageToDomain(_ dto: ChatMessageDTO) -> ChatMessage {
+        return ChatMessage(content: dto.content,
+                           role: .init(rawValue: dto.role) ?? .assistant,
+                           createdAt: isoStringToDate(dto.createdAt) ?? .now)
+    }
+    
+    /// Convert array of message dto to domain
+    /// - Parameter dto: array message dto
+    /// - Returns: array message domain
+    func messagesToDomain(_ dtos: [ChatMessageDTO]) -> [ChatMessage] {
+        dtos.map(messageToDomain)
+    }
+    
     /// ISO string convert to Date
     /// - Parameter isoString: ISO string
     /// - Returns: date (optional)
-    func isoStringToDate(_ isoString: String) -> Date? {
+    private func isoStringToDate(_ isoString: String) -> Date? {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         

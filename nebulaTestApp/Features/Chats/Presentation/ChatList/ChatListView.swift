@@ -22,12 +22,12 @@ struct ChatListView: View {
                 .refreshable {
                     viewModel.perform(action: .pullToRefresh)
                 }
-                .preferredColorScheme(.dark)
         }
         .toolbar {
             toolBarTitle(placement: .principal)
         }
         .coloredNavigationBarBackButton()
+        .preferredColorScheme(.dark)
         .onAppear {
             viewModel.perform(action: .onAppear)
         }
@@ -51,20 +51,24 @@ struct ChatListView: View {
             if viewModel.isLoading {
                 
                 loadingView
+                    .transition(.opacity)
                 
             } else if let message = viewModel.errorMessage {
                 
                 messageView(title: Str.ChatListView.Error.title,
                             description: message)
+                    .transition(.opacity)
                 
             } else if viewModel.sections.isEmpty {
                 
                 messageView(title: Str.ChatListView.EmptyList.title,
                             description: Str.ChatListView.EmptyList.desc)
+                    .transition(.opacity)
                 
             } else {
                 
                 listView
+                    .transition(.opacity)
                 
             }
         }

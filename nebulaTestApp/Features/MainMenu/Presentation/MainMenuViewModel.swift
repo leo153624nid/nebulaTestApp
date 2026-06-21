@@ -30,6 +30,7 @@ final class MainMenuViewModel: ViewModel {
     private var cancellables = Set<AnyCancellable>()
     
     @Injected private var tokenStorage: TokenStorage
+    @Injected private var chatsRepository: ChatsProvider
     
     /// View on screen.
     private var isViewAppeared = false
@@ -61,10 +62,15 @@ final class MainMenuViewModel: ViewModel {
             break
             
         case .chatButtonClicked:
-            let mock = Chat(id: "mockId1",
-                            title: "title?",
-                            updatedAt: .now)
-            coordinator.openChatScreen(for: mock) // TODO: where find new chatID ?
+            guard let chatId = chatsRepository.newChatId else {
+                chatsRepository.refreshNewChatId()
+                showChatIdErrorAlert()
+                return
+            }
+            let newChat = Chat(id: chatId,
+                               title: nil,
+                               updatedAt: .now)
+            coordinator.openChatScreen(for: newChat)
             
         case .videoButtonClicked:
             break // TODO: update
@@ -112,6 +118,11 @@ final class MainMenuViewModel: ViewModel {
             coordinator.showAlert(item)
         }
 #endif
+    }
+    
+    private func showChatIdErrorAlert() {
+        let item = AlertItem.newChatIdAlertItem()
+        coordinator.showAlert(item)
     }
     
 }

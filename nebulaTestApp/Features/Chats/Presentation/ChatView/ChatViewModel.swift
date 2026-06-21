@@ -10,8 +10,10 @@ import Foundation
 
 /// Actions from Chat view
 enum ChatViewAction {
-    case sendPromt(text: String)
+    case sendMessage
     case listButtonTapped
+    case onAppear
+    case onDisappear
 }
 
 /// Chat viewModel
@@ -23,15 +25,26 @@ final class ChatViewModel: ViewModel {
     /// Subscriptions store
     private var cancellables = Set<AnyCancellable>()
     
+    @Injected private var chatsRepository: ChatsProvider
+    
     /// Chat data
     let chat: Chat
     /// Screen opened from chat list
     let comeFromList: Bool
     
-    /// Search text
-    @Published var searchText = "" // TODO
-    /// View is blocked with loading splash
-    @Published private var isViewBlocked = false
+    /// TODO
+    @Published private(set) var messages: [ChatMessage] = []
+    /// TODO
+    @Published var inputText = ""
+    /// TODO
+    @Published private(set) var isLoading = false
+    /// TODO
+    @Published private(set) var isSending = false
+    /// TODO
+    @Published private(set) var errorMessage: String?
+    
+    /// View on screen.
+    private var isViewAppeared = false
     
     // MARK: - Initialization
     
@@ -40,7 +53,7 @@ final class ChatViewModel: ViewModel {
     /// - Parameter coordinator: coordinator
     convenience init(coordinator: HomeTabCoordinator) {
         self.init(coordinator: coordinator,
-                  chat: Chat(id: "TODO", // TODO: how setup chat_id ?
+                  chat: Chat(id: "no chat id",
                              updatedAt: .now),
                   comeFromList: false)
     }
@@ -57,6 +70,7 @@ final class ChatViewModel: ViewModel {
         self.chat = chat
         self.comeFromList = comeFromList
         setupUpdates()
+        loadHistory()
     }
     
     // MARK: - Public methods
@@ -65,8 +79,14 @@ final class ChatViewModel: ViewModel {
     /// - Parameter action: view's action
     func perform(action: ChatViewAction) {
         switch action {
-        case .sendPromt(let text):
-            break // TODO
+        case .onAppear:
+            isViewAppeared = true
+            
+        case .onDisappear:
+            isViewAppeared = false
+            
+        case .sendMessage:
+            sendMessage()
             
         case .listButtonTapped:
             coordinator.openChatListScreen()
@@ -74,6 +94,67 @@ final class ChatViewModel: ViewModel {
     }
     
     // MARK: - Private methods
+    private func loadHistory() {
+        guard !isLoading else { return }
+        
+        Task { [weak self] in
+            guard let self else { return }
+            
+            await MainActor.run {
+                self.isLoading = true
+            }
+            
+            let result = await chatsRepository.getChatMessages(chatId: chat.id)
+            
+            await MainActor.run {
+                guard self.isViewAppeared else { return }
+                
+                switch result {
+                case .success(let messages):
+                    self.messages = messages
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                }
+                
+                self.isLoading = false
+            }
+        }
+    }
+    
+    private func sendMessage() {
+        let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty, !isSending else { return }
+        
+        Task { [weak self] in
+            guard let self else { return }
+            
+            let userMessage = ChatMessage(content: text,
+                                          role: .user,
+                                          createdAt: .now)
+            await MainActor.run {
+                self.messages.append(userMessage)
+                self.inputText = ""
+                self.isSending = true
+                self.errorMessage = nil
+            }
+            
+            let result = await chatsRepository.getChatsList() // TODO
+            
+            await MainActor.run {
+                guard self.isViewAppeared else { return }
+                
+                switch result {
+                case .success(let reply):
+//                    self.messages.append(reply)
+                    break // TODO
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                }
+                
+                self.isSending = false
+            }
+        }
+    }
     
 }
 
@@ -99,16 +180,17 @@ private extension ChatViewModel {
 //            }
 //            .store(in: &cancellables)
         
-        $isViewBlocked
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isViewBlocked in
-                if isViewBlocked {
+//        $isViewBlocked
+//            .removeDuplicates()
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] isViewBlocked in
+//                if isViewBlocked {
 //                    self?.coordinator.showLoadingSplash() // TODO
-                } else {
+//                } else {
 //                    self?.coordinator.hideLoadingSplash() // TODO
-                }
-            }
-            .store(in: &cancellables)
+//                }
+//            }
+//            .store(in: &cancellables)
     }
+    
 }

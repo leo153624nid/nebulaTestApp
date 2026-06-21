@@ -39,6 +39,10 @@
 // MARK: - ChatView
 
 "ChatView.screenTitle" = "AI Chat";
+"ChatView.EmptyList.title" = "Your AI assistant for anything";
+"ChatView.EmptyList.desc" = "Ask questions, get answers, and explore ideas in seconds";
+"ChatView.Error.title" = "Error";
+"ChatView.inputPlaceholder" = "Ask anything...";
 
 // MARK: - ChatListView
 

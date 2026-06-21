@@ -13,10 +13,22 @@ final class ChatsRepository: ChatsProvider {
     private let chatService: ChatAPI
     private let mapper = ChatsMapper()
     
+    /// Chat id for new chat
+    var newChatId: String? {
+        chatService.newChatId
+    }
+    
+    // MARK: - Public methods
+    
     /// Initialization
     /// - Parameter chatService: chat API
     init(chatService: ChatAPI) {
         self.chatService = chatService
+    }
+    
+    /// Re-fetches the chat id for new chat.
+    func refreshNewChatId() {
+        chatService.refreshNewChatId()
     }
     
     /// Get list of chats
@@ -24,6 +36,14 @@ final class ChatsRepository: ChatsProvider {
     func getChatsList() async -> Result<[Chat], NetworkError> {
         let result = await chatService.downloadChatsList()
         return result.map { mapper.chatsToDomain($0) }
+    }
+    
+    /// Get list of chat messages
+    /// - Parameter chatId: chat id
+    /// - Returns: message array or error
+    func getChatMessages(chatId: String) async -> Result<[ChatMessage], NetworkError> {
+        let result = await chatService.downloadChatMessages(chatId: chatId)
+        return result.map { mapper.messagesToDomain($0) }
     }
     
 }
