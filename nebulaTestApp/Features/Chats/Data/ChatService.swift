@@ -122,6 +122,49 @@ final class ChatService: ChatAPI {
         }
     }
     
+    /// Send user message and get answer
+    /// - Parameter chatId: chat id
+    /// - Parameter message: message text
+    /// - Returns: answer text or error
+    func sendMessage(to chatId: String, message: String) async -> Result<String, NetworkError> {
+        // TODO: handle Validation Error from server ? *bug - server return String overwise [ErrorDTO]
+        guard let token = tokenStorage.getToken(), let userId = tokenStorage.getUserID() else {
+            return .failure(.unAuthorized)
+        }
+        
+        let body = SendMessageBody(message: message,
+                                   personaId: nil,
+                                   additionalPromt: nil)
+        var bodyData: Data?
+        if let data = try? JSONEncoder().encode(body) {
+            bodyData = data
+        }
+        let endpoint = BaseNetworkEndPoint(baseURL: Constants.baseURL + "/\(chatId)/messages",
+                                           headers: [
+                                            "accept": "application/json",
+                                            "Authorization": "Bearer " + token
+                                           ],
+                                           urlParams: [
+                                            "user_id": userId,
+                                            "app_id": Constants.appID
+                                           ],
+                                           params: bodyData,
+                                           requestType: .POST)
+        do {
+            let data = try await networkService.performRequest(endpoint: endpoint)
+            
+            do {
+                let response = try JSONDecoder().decode(SendMessageResponse.self,
+                                                        from: data)
+                return .success(response.assistantMessage)
+            } catch {
+                return .failure(NetworkError.decodingFailed)
+            }
+        } catch {
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Private methods
     /// Get chat id for new chat
     /// - Returns: chat id of new chat

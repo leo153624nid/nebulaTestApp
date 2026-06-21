@@ -24,4 +24,10 @@ protocol ChatAPI {
     /// - Returns: message array or error
     func downloadChatMessages(chatId: String) async -> Result<[ChatMessageDTO], NetworkError>
     
+    /// Send user message and get answer
+    /// - Parameter chatId: chat id
+    /// - Parameter message: message text
+    /// - Returns: answer text or error
+    func sendMessage(to chatId: String, message: String) async -> Result<String, NetworkError>
+    
 }

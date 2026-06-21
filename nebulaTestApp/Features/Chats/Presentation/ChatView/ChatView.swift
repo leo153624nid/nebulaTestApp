@@ -8,18 +8,28 @@
 import SwiftUI
 
 /// Chat view
-struct ChatView: View { // TODO: add paginating, add keyboard on start
+struct ChatView: View { // TODO: add paginating
     
     // MARK: State
     /// ViewModel
     @ObservedObject var viewModel: ChatViewModel
     /// Keyboard observer
-    @StateObject private var keyboard = KeyboardObserver() // TODO
+    @StateObject private var keyboard = KeyboardObserver() // TODO: is needed?
+    
+    /// Bottom safe area inset
+    private var bottomInset: CGFloat {
+        let bottomInset = UIWindow.current?.safeAreaInsets.bottom ?? 0
+        return bottomInset > 0 ? bottomInset : 0
+    }
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             Color.background
                 .ignoresSafeArea()
+            
+            Color.card
+                .ignoresSafeArea()
+                .frame(height: bottomInset)
             
             contentView
         }
@@ -95,7 +105,7 @@ struct ChatView: View { // TODO: add paginating, add keyboard on start
                 loadingView
                     .transition(.opacity)
                 
-            } else if let error = viewModel.errorMessage {
+            } else if let error = viewModel.errorMessage { // TODO: add error of sending
                 
                 messageView(title: Str.ChatView.Error.title,
                             description: error)
@@ -118,7 +128,6 @@ struct ChatView: View { // TODO: add paginating, add keyboard on start
                           isSending: viewModel.isSending,
                           onSend: { viewModel.perform(action: .sendMessage) })
         }
-//        .offset(y: keyboard.isKeyboardVisible ? -headerOffset : 0) // TODO
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .animation(.easeInOut, value: viewModel.messages)
         .animation(.easeInOut, value: viewModel.errorMessage)
@@ -137,7 +146,7 @@ struct ChatView: View { // TODO: add paginating, add keyboard on start
     private var messagesScrollView: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                LazyVStack(spacing: 12) {
+                LazyVStack(spacing: 20) {
                     ForEach(viewModel.messages) {
                         MessageBubbleView(message: $0)
                             .id($0.id)
@@ -145,6 +154,7 @@ struct ChatView: View { // TODO: add paginating, add keyboard on start
                     
                     if viewModel.isSending {
                         TypingIndicatorView()
+                            .transition(.opacity)
                     }
                 }
                 .padding(.horizontal, 16)

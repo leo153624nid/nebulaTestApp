@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// TODO
-struct TypingIndicatorView: View { // TODO
+/// Typing Indicator View
+struct TypingIndicatorView: View {
     
     @State private var animating = false
     
@@ -16,8 +16,17 @@ struct TypingIndicatorView: View { // TODO
         HStack(spacing: 4) {
             ForEach(0..<3, id: \.self) { i in
                 Circle()
-                    .fill(Color.red)
-                    .frame(width: 6, height: 6)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .accentGradientStart,
+                                .accentGradientEnd
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .frame(width: 19, height: 19)
                     .scaleEffect(animating ? 1 : 0.5)
                     .animation(
                         .easeInOut(duration: 0.5)
@@ -27,12 +36,15 @@ struct TypingIndicatorView: View { // TODO
                     )
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(Color(white: 0.18))
-        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .padding(.horizontal, 16)
+        .padding(.vertical, 16)
+        .background(Color.card.opacity(0.5))
+        .clipShape(RoundedCorners(corners: [.topLeft, .topRight, .bottomRight],
+                                  radius: 24))
         .frame(maxWidth: .infinity, alignment: .leading)
-        .onAppear { animating = true }
+        .onAppear {
+            animating = true
+        }
     }
 }
 

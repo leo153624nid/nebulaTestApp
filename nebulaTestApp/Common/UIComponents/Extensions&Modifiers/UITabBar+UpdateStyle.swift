@@ -26,7 +26,7 @@ extension UITabBar {
         stackedLayoutAppearance.selected.iconColor = UIColor(resource: .accentGradientEnd)
         stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(resource: .accentGradientEnd)]
         stackedLayoutAppearance.normal.iconColor = UIColor(resource: .card)
-        stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(resource: .textSecondary)]
+        stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(resource: .textAccent)]
         
         tabBar.standardAppearance = tabBarAppearance
         tabBar.scrollEdgeAppearance = tabBarAppearance

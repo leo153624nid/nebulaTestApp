@@ -17,7 +17,7 @@ enum ChatViewAction {
 }
 
 /// Chat viewModel
-final class ChatViewModel: ViewModel {
+final class ChatViewModel: ViewModel { // TODO: handle sending, add paginating
     
     // MARK: - Properties
     /// Own coordinator
@@ -32,15 +32,15 @@ final class ChatViewModel: ViewModel {
     /// Screen opened from chat list
     let comeFromList: Bool
     
-    /// TODO
+    /// Array of messages
     @Published private(set) var messages: [ChatMessage] = []
-    /// TODO
+    /// Input text
     @Published var inputText = ""
-    /// TODO
+    /// History of messages is loading
     @Published private(set) var isLoading = false
-    /// TODO
+    /// Message is sending
     @Published private(set) var isSending = false
-    /// TODO
+    /// Error text
     @Published private(set) var errorMessage: String?
     
     /// View on screen.
@@ -138,17 +138,21 @@ final class ChatViewModel: ViewModel {
                 self.errorMessage = nil
             }
             
-            let result = await chatsRepository.getChatsList() // TODO
+            let result = await chatsRepository.sendMessage(to: chat.id,
+                                                           message: text)
             
             await MainActor.run {
                 guard self.isViewAppeared else { return }
                 
                 switch result {
-                case .success(let reply):
-//                    self.messages.append(reply)
-                    break // TODO
+                case .success(let answer):
+                    self.messages.append(
+                        ChatMessage(content: answer,
+                                    role: .assistant,
+                                    createdAt: .now)
+                    )
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
+                    self.errorMessage = error.localizedDescription // TODO
                 }
                 
                 self.isSending = false

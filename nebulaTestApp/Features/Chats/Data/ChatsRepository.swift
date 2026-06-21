@@ -46,4 +46,12 @@ final class ChatsRepository: ChatsProvider {
         return result.map { mapper.messagesToDomain($0) }
     }
     
+    /// Send user message and get answer
+    /// - Parameter chatId: chat id
+    /// - Parameter message: message text
+    /// - Returns: answer text or error
+    func sendMessage(to chatId: String, message: String) async -> Result<String, NetworkError> {
+        return await chatService.sendMessage(to: chatId, message: message)
+    }
+    
 }
