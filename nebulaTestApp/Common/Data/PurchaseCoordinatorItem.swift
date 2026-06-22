@@ -16,7 +16,7 @@ struct PurchaseCoordinatorItem: Identifiable {
     /// Identifier.
     let id = UUID()
     /// Purchase view model
-//    let viewModel: PurchaseViewModel // TODO
+    let viewModel: PurchaseViewModel
     
     /// Initialization with paywall style.
     ///
@@ -28,9 +28,8 @@ struct PurchaseCoordinatorItem: Identifiable {
     init(coordinator: any Coordinator,
          style: PaywallStyle,
          completion: CloseCallback? = nil) {
-//        self.viewModel = PurchaseViewModel(coordinator: coordinator,
-//                                           source: source,
-//                                           style: style,
-//                                           completion: completion)
+        self.viewModel = PurchaseViewModel(coordinator: coordinator,
+                                           style: style,
+                                           completion: completion)
     }
 }

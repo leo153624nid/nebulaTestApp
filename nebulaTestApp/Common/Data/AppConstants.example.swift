@@ -12,5 +12,7 @@ enum AppConstants {
     enum API {
         static let userID = "YOUR_USER_ID_HERE"
         static let token = "YOUR_TOKEN_HERE"
+        static let apphudBundleID = "YOUR_APPHUD_BUNDLE_ID_HERE"
+        static let apphudPublicKey = "YOUR_APPHUD_TOKEN_HERE"
     }
 }

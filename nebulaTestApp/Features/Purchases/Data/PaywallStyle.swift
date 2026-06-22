@@ -8,6 +8,6 @@
 import Foundation
 
 /// Paywall style
-enum PaywallStyle: Int {
-    case base = 0
+enum PaywallStyle: String {
+    case main
 }

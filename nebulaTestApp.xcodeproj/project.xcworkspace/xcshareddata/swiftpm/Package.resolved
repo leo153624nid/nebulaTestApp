@@ -1,6 +1,15 @@
 {
-  "originHash" : "1fa961aa1dc717cea452f3389668f0f99a254f07e4eb11d190768a53798f744f",
+  "originHash" : "db5fd103e6d9c84af4b9c923c3eff2d5d95f92458c790d0725c4fb7bec8cc8e7",
   "pins" : [
+    {
+      "identity" : "apphudsdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apphud/ApphudSDK",
+      "state" : {
+        "revision" : "23c0de964ed7d2f6f9cda83efaa1a40acfb84359",
+        "version" : "4.2.3"
+      }
+    },
     {
       "identity" : "swiftlintplugins",
       "kind" : "remoteSourceControl",

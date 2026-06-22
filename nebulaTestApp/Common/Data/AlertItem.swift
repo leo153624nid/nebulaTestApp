@@ -52,6 +52,23 @@ extension AlertItem {
                   ])
     }
     
+    /// Alert item for paywall error
+    static func paywallErrorAlertItem(error: Error, onAccept: (() -> Void)? = nil) -> AlertItem {
+        let title = Str.ChatView.Error.title
+        let message = if let error = error as? NetworkError {
+            error.localizedDescription
+        } else {
+            NetworkError.unknown.localizedDescription
+        }
+        
+        return AlertItem(title: title,
+                         message: message,
+                         actions: [
+                            AlertAction(title: Str.Common.ok,
+                                        action: onAccept ?? { })
+                         ])
+    }
+    
 #if DEBUG
     /// Alert item for setup prod credentials
     static func setupCredentialsAlertItem(completion: @escaping () -> Void) -> AlertItem {

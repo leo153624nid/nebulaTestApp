@@ -21,8 +21,8 @@ struct AppRootCoordinatorView: View {
                 .tag(AppTab.home)
         }
         .generalAlert(item: $coordinator.alert)
-//        .fullScreenCover(item: $coordinator.purchase) { item in // TODO
-//            PurchaseView(viewModel: item.viewModel)
-//        }
+        .fullScreenCover(item: $coordinator.purchase) { item in
+            PurchaseView(viewModel: item.viewModel)
+        }
     }
 }

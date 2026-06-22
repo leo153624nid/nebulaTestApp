@@ -28,7 +28,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     ) -> Bool {
         DIContainer.shared.registerAll()
         
-        /// apply tabbar style
+        /// Start SDK's
+        if let manager = DIContainer.shared.resolve(type: ActivationManager.self) {
+            manager.start()
+        }
+        
+        /// Apply tabbar style
         UITabBar.updateStyle()
         
         return true

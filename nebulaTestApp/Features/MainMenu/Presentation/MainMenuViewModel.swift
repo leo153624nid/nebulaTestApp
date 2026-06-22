@@ -31,6 +31,7 @@ final class MainMenuViewModel: ViewModel {
     
     @Injected private var tokenStorage: TokenStorage
     @Injected private var chatsRepository: ChatsProvider
+    @Injected private var activationManager: ActivationManager
     
     /// View on screen.
     private var isViewAppeared = false
@@ -59,7 +60,12 @@ final class MainMenuViewModel: ViewModel {
             isViewAppeared = false
             
         case .settingsButtonClicked:
-            break
+            guard activationManager.hasActiveSubscription else {
+                showActivationView(for: .settingsButtonClicked)
+                return
+            }
+            // Open new screen
+            return
             
         case .chatButtonClicked:
             guard let chatId = chatsRepository.newChatId else {
@@ -73,13 +79,28 @@ final class MainMenuViewModel: ViewModel {
             coordinator.openChatScreen(for: newChat)
             
         case .videoButtonClicked:
-            break // TODO: update
+            guard activationManager.hasActiveSubscription else {
+                showActivationView(for: .videoButtonClicked)
+                return
+            }
+            // Open new screen
+            return // TODO: update
             
         case .fixWritingButtonClicked:
-            break
+            guard activationManager.hasActiveSubscription else {
+                showActivationView(for: .fixWritingButtonClicked)
+                return
+            }
+            // Open new screen
+            return
             
         case .understandButtonClicked:
-            break
+            guard activationManager.hasActiveSubscription else {
+                showActivationView(for: .understandButtonClicked)
+                return
+            }
+            // Open new screen
+            return
             
         }
     }
@@ -90,21 +111,18 @@ final class MainMenuViewModel: ViewModel {
         showCredentialAlertIfNeeded()
     }
     
-//    private func showActivationView(for sectionItem: SectionItem, // TODO
-//                                    style: PaywallStyle = .base) {
-//        let purchaseItem = PurchaseCoordinatorItem(coordinator: coordinator,
-//                                                   source: screenName,
-//                                                   style: style) { [weak self] isShown in
-//            guard isShown else { return }
-//            
-//            RPHAnalytics.logMainScreen(from: .activation)
-//            
-//            if ActivationInfo.isFullVersion {
-//                self?.handleSectionItemTapped(sectionItem)
-//            }
-//        }
-//        coordinator.showPurchase(purchaseItem)
-//    }
+    private func showActivationView(for action: MainMenuViewAction,
+                                    style: PaywallStyle = .main) {
+        let purchaseItem = PurchaseCoordinatorItem(coordinator: coordinator,
+                                                   style: style) { [weak self] isShown in
+            guard isShown else { return }
+            
+            if self?.activationManager.hasActiveSubscription == true {
+                self?.perform(action: action)
+            }
+        }
+        coordinator.showPurchase(purchaseItem)
+    }
     
     private func showCredentialAlertIfNeeded() {
 #if DEBUG

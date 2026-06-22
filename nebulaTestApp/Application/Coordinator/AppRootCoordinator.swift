@@ -18,6 +18,7 @@ final class AppRootCoordinator: RootCoordinator {
     private var cancellables = Set<AnyCancellable>()
     
     @Injected private var tokenStorage: TokenStorage
+    @Injected private var activationManager: ActivationManager
     
     /// Selected root tab.
     @Published var tab = AppTab.home {
@@ -80,19 +81,17 @@ final class AppRootCoordinator: RootCoordinator {
     ///
     /// - Parameter purchase: purchase details.
     /// - Parameter forced: is forced call.
-    func showPurchase(_ purchase: PurchaseCoordinatorItem, forced: Bool = false) { // TODO
-//        guard !forced else {
-//            self.purchase = purchase
-//            return
-//        }
-//        
-//        if purchase.accessType == .extraHazard && ActivationInfo.hasExtraHazardAccess {
-//            purchase.viewModel.completion?(false)
-//        } else if purchase.accessType == .fullVersion && ActivationInfo.isFullVersion {
-//            purchase.viewModel.completion?(false)
-//        } else {
-//            self.purchase = purchase
-//        }
+    func showPurchase(_ purchase: PurchaseCoordinatorItem, forced: Bool = false) {
+        guard !forced else {
+            self.purchase = purchase
+            return
+        }
+        
+        if activationManager.hasActiveSubscription {
+            purchase.viewModel.completion?(false)
+        } else {
+            self.purchase = purchase
+        }
     }
     
     /// Dismiss purchase.

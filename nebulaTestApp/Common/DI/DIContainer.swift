@@ -105,6 +105,9 @@ extension DIContainer {
         register(type: TokenStorage.self) { _ in
             KeychainTokenStorage()
         }
+        register(type: ActivationManager.self) { _ in
+            ActivationManager()
+        }
     }
     
     private func registerChatsFeature() {
