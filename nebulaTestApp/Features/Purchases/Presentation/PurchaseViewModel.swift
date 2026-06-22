@@ -114,7 +114,7 @@ final class PurchaseViewModel: ViewModel {
                 if !paywallCfg.isEmpty {
                     self.state = .ready(paywallCfg)
                 } else {
-                    self.state = .failed(NetworkError.connectionError(errorToShow ?? "")) // TODO: create PaywallError
+                    self.state = .failed(PaywallError(errorToShow ?? ""))
                 }
             }
         }
@@ -164,7 +164,7 @@ extension PurchaseViewModel {
         case initial
         case loading
         case ready([ApphudProduct])
-        case failed(NetworkError) // TODO: create PaywallError and wrap
+        case failed(PaywallError)
         case shown
     }
 }

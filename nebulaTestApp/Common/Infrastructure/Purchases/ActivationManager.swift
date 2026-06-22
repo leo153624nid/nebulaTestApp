@@ -68,7 +68,11 @@ final class ActivationManager: ObservableObject {
 //        let paywallConfig = try await AdaptyUI.getPaywallConfiguration(forPaywall: paywall)
 //        
 //        return paywallConfig
-        return [] // TODO
+        
+        if let paywallConfig = await Apphud.placement("main")?.paywall?.products {
+            return paywallConfig
+        }
+        throw "Hasn't any products"
     }
     
     // MARK: - Private

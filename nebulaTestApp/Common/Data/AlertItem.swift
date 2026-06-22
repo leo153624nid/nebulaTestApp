@@ -55,8 +55,8 @@ extension AlertItem {
     /// Alert item for paywall error
     static func paywallErrorAlertItem(error: Error, onAccept: (() -> Void)? = nil) -> AlertItem {
         let title = Str.ChatView.Error.title
-        let message = if let error = error as? NetworkError {
-            error.localizedDescription
+        let message = if let error = error as? PaywallError {
+            error.message
         } else {
             NetworkError.unknown.localizedDescription
         }
