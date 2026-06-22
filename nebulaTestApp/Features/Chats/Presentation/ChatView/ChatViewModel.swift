@@ -152,7 +152,7 @@ final class ChatViewModel: ViewModel { // TODO: handle sending, add paginating
                                     createdAt: .now)
                     )
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription // TODO
+                    self.errorMessage = error.localizedDescription
                 }
                 
                 self.isSending = false
@@ -163,9 +163,9 @@ final class ChatViewModel: ViewModel { // TODO: handle sending, add paginating
 }
 
 // MARK: - Updates
-private extension ChatViewModel {
+private extension ChatViewModel { // TODO
     func setupUpdates() {
-//        $searchText // TODO
+//        $searchText
 //            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
 //            .removeDuplicates()
 //            .receive(on: DispatchQueue.global(qos: .userInitiated))
@@ -189,9 +189,9 @@ private extension ChatViewModel {
 //            .receive(on: DispatchQueue.main)
 //            .sink { [weak self] isViewBlocked in
 //                if isViewBlocked {
-//                    self?.coordinator.showLoadingSplash() // TODO
+//                    self?.coordinator.showLoadingSplash()
 //                } else {
-//                    self?.coordinator.hideLoadingSplash() // TODO
+//                    self?.coordinator.hideLoadingSplash()
 //                }
 //            }
 //            .store(in: &cancellables)

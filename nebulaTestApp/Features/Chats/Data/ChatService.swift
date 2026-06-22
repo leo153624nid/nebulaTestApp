@@ -142,7 +142,8 @@ final class ChatService: ChatAPI {
         let endpoint = BaseNetworkEndPoint(baseURL: Constants.baseURL + "/\(chatId)/messages",
                                            headers: [
                                             "accept": "application/json",
-                                            "Authorization": "Bearer " + token
+                                            "Authorization": "Bearer " + token,
+                                            "Content-Type": "application/json"
                                            ],
                                            urlParams: [
                                             "user_id": userId,

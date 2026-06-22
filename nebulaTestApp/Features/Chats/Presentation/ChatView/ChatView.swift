@@ -105,13 +105,7 @@ struct ChatView: View { // TODO: add paginating
                 loadingView
                     .transition(.opacity)
                 
-            } else if let error = viewModel.errorMessage { // TODO: add error of sending
-                
-                messageView(title: Str.ChatView.Error.title,
-                            description: error)
-                    .transition(.opacity)
-                
-            } else if viewModel.messages.isEmpty {
+            } else if viewModel.messages.isEmpty, viewModel.errorMessage == nil {
                 
                 messageView(title: Str.ChatView.EmptyList.title, // TODO: add gradient
                             description: Str.ChatView.EmptyList.desc)
@@ -121,6 +115,13 @@ struct ChatView: View { // TODO: add paginating
                 
                 messagesScrollView
                     .transition(.opacity)
+                    .overlay(alignment: .bottom) {
+                        if let error = viewModel.errorMessage {
+                            
+                            errorBanner(text: error)
+                                .transition(.opacity)
+                        }
+                    }
                 
             }
             
@@ -192,6 +193,27 @@ struct ChatView: View { // TODO: add paginating
         .multilineTextAlignment(.center)
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func errorBanner(text: String) -> some View {
+        VStack(spacing: 8) {
+            Text(Str.ChatView.Error.title)
+                .font(.system(size: 20, weight: .bold))
+                .foregroundStyle(Color.textAccent)
+            
+            Text(text)
+                .font(.system(size: 14, weight: .regular))
+                .foregroundStyle(Color.textAccent.opacity(0.5))
+                .lineLimit(nil)
+        }
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(
+            Rectangle()
+                .fill(Color.red.opacity(0.4))
+                .clipShape(RoundedCorners(radius: 24))
+        )
     }
     
 }
