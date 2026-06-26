@@ -10,7 +10,18 @@
 		5CF4052C2FE912B000DF99BD /* ApphudSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 5CF4052B2FE912B000DF99BD /* ApphudSDK */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		5C2FD9CD2FEE587300EF888F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C99A1892FE3DF43004FA6C0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5C99A1902FE3DF43004FA6C0;
+			remoteInfo = nebulaTestApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		5C2FD9C92FEE587300EF888F /* nebulaTestAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = nebulaTestAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C99A1912FE3DF43004FA6C0 /* nebulaTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nebulaTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -26,6 +37,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		5C2FD9CA2FEE587300EF888F /* nebulaTestAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = nebulaTestAppTests;
+			sourceTree = "<group>";
+		};
 		5C99A1932FE3DF43004FA6C0 /* nebulaTestApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -37,6 +53,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5C2FD9C62FEE587300EF888F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5C99A18E2FE3DF43004FA6C0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -52,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				5C99A1932FE3DF43004FA6C0 /* nebulaTestApp */,
+				5C2FD9CA2FEE587300EF888F /* nebulaTestAppTests */,
 				5C99A1922FE3DF43004FA6C0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -60,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				5C99A1912FE3DF43004FA6C0 /* nebulaTestApp.app */,
+				5C2FD9C92FEE587300EF888F /* nebulaTestAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,6 +92,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5C2FD9C82FEE587300EF888F /* nebulaTestAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C2FD9D12FEE587300EF888F /* Build configuration list for PBXNativeTarget "nebulaTestAppTests" */;
+			buildPhases = (
+				5C2FD9C52FEE587300EF888F /* Sources */,
+				5C2FD9C62FEE587300EF888F /* Frameworks */,
+				5C2FD9C72FEE587300EF888F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5C2FD9CE2FEE587300EF888F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5C2FD9CA2FEE587300EF888F /* nebulaTestAppTests */,
+			);
+			name = nebulaTestAppTests;
+			packageProductDependencies = (
+			);
+			productName = nebulaTestAppTests;
+			productReference = 5C2FD9C92FEE587300EF888F /* nebulaTestAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		5C99A1902FE3DF43004FA6C0 /* nebulaTestApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5C99A19C2FE3DF44004FA6C0 /* Build configuration list for PBXNativeTarget "nebulaTestApp" */;
@@ -102,6 +150,10 @@
 				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
+					5C2FD9C82FEE587300EF888F = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 5C99A1902FE3DF43004FA6C0;
+					};
 					5C99A1902FE3DF43004FA6C0 = {
 						CreatedOnToolsVersion = 26.5;
 					};
@@ -126,11 +178,19 @@
 			projectRoot = "";
 			targets = (
 				5C99A1902FE3DF43004FA6C0 /* nebulaTestApp */,
+				5C2FD9C82FEE587300EF888F /* nebulaTestAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5C2FD9C72FEE587300EF888F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5C99A18F2FE3DF43004FA6C0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -181,6 +241,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5C2FD9C52FEE587300EF888F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5C99A18D2FE3DF43004FA6C0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -190,7 +257,67 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		5C2FD9CE2FEE587300EF888F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5C99A1902FE3DF43004FA6C0 /* nebulaTestApp */;
+			targetProxy = 5C2FD9CD2FEE587300EF888F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		5C2FD9CF2FEE587300EF888F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6K8TWM2B86;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = chaykin.nebulaTestAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nebulaTestApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/nebulaTestApp";
+			};
+			name = Debug;
+		};
+		5C2FD9D02FEE587300EF888F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6K8TWM2B86;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = chaykin.nebulaTestAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/nebulaTestApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/nebulaTestApp";
+			};
+			name = Release;
+		};
 		5C99A19A2FE3DF44004FA6C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -399,6 +526,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5C2FD9D12FEE587300EF888F /* Build configuration list for PBXNativeTarget "nebulaTestAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5C2FD9CF2FEE587300EF888F /* Debug */,
+				5C2FD9D02FEE587300EF888F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5C99A18C2FE3DF43004FA6C0 /* Build configuration list for PBXProject "nebulaTestApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

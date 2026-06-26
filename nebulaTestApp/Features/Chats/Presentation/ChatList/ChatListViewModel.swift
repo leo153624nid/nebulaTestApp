@@ -44,7 +44,6 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
     /// - Parameter coordinator: coordinator
     init(coordinator: HomeTabCoordinator) {
         self.coordinator = coordinator
-        getChats()
     }
     
     // MARK: - Public methods
@@ -70,29 +69,26 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
     
     // MARK: - Private methods
     private func getChats() {
-        guard !isLoading else { return }
-        
         Task { [weak self] in
-            guard let self else { return }
+            guard let self, !isLoading else { return }
             
-            await MainActor.run {
-                self.isLoading = true
-            }
+            self.isLoading = true
             
             let result = await chatsRepository.getChatsList()
             
-            await MainActor.run {
-                guard self.isViewAppeared else { return }
-                
-                switch result {
-                case .success(let chats):
-                    self.setupChats(with: chats)
-                case .failure(let error):
-                    self.errorMessage = error.localizedDescription
-                }
-                
+            guard self.isViewAppeared else {
                 self.isLoading = false
+                return
             }
+            
+            switch result {
+            case .success(let chats):
+                self.setupChats(with: chats)
+            case .failure(let error):
+                self.errorMessage = error.localizedDescription
+            }
+            
+            self.isLoading = false
         }
     }
     
@@ -101,7 +97,7 @@ final class ChatListViewModel: ViewModel { // TODO: add paginating
         
         groupingTask?.cancel()
         groupingTask = Task.detached(priority: .userInitiated) { [weak self] in
-            guard let self else { return }
+            guard let self, !Task.isCancelled else { return }
             
             let grouped = Self.groupedAndSorted(newChats)
             

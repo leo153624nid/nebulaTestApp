@@ -92,7 +92,7 @@ extension Chat {
         .init(id: "a8",
               title: "title",
               updatedAt: .daysAgo(8),
-              lastMessagePreview: "last message"),
+              lastMessagePreview: "last message")
     ]
 }
 
